@@ -5,16 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  CreditCard,
-  Truck,
-  ArrowLeft,
-  ArrowRight,
   Lock,
   ShoppingBag,
+  ArrowRight,
+  Info,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import {
   Select,
@@ -35,10 +34,70 @@ import { Container } from '@/components/shared/Container';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { Reveal } from '@/components/shared/Reveal';
 import { useCartStore } from '@/store/cart-store';
-import { formatPrice } from '@/lib/utils';
-import type { CartItem as CartItemType } from '@/lib/types';
+import { storeConfig } from '@/lib/store-config';
+import { formatPrice, cn } from '@/lib/utils';
 
 const FREE_SHIPPING_THRESHOLD = 2999;
+
+// ─── Validation ───────────────────────────────────────────────────────────
+interface FormErrors {
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  paymentMethod?: string;
+  terms?: string;
+}
+
+function validateForm(form: CheckoutFormData): FormErrors {
+  const errors: FormErrors = {};
+
+  if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = 'Please enter a valid email address';
+  }
+
+  if (!form.phone || !/^\+?[\d\s-]{10,15}$/.test(form.phone.replace(/\s/g, ''))) {
+    errors.phone = 'Please enter a valid phone number';
+  }
+
+  if (!form.firstName.trim()) {
+    errors.firstName = 'First name is required';
+  }
+
+  if (!form.lastName.trim()) {
+    errors.lastName = 'Last name is required';
+  }
+
+  if (!form.address.trim()) {
+    errors.address = 'Address is required';
+  }
+
+  if (!form.city.trim()) {
+    errors.city = 'City is required';
+  }
+
+  if (!form.state.trim()) {
+    errors.state = 'State is required';
+  }
+
+  if (!form.pincode.trim() || !/^\d{6}$/.test(form.pincode.trim())) {
+    errors.pincode = 'Please enter a valid 6-digit PIN code';
+  }
+
+  if (!form.paymentMethod) {
+    errors.paymentMethod = 'Please select a payment method';
+  }
+
+  if (!form.termsAccepted) {
+    errors.terms = 'You must accept the terms and conditions';
+  }
+
+  return errors;
+}
 
 // ─── Order Summary Sidebar ────────────────────────────────────────────────
 function OrderSummary() {
@@ -47,12 +106,11 @@ function OrderSummary() {
   const getDiscount = useCartStore((s) => s.getDiscount);
   const getTotal = useCartStore((s) => s.getTotal);
   const promoCode = useCartStore((s) => s.promoCode);
-  const promoDiscount = useCartStore((s) => s.promoDiscount);
 
   const subtotal = getSubtotal();
   const discount = getDiscount();
   const total = getTotal();
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 99;
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : storeConfig.shippingCost;
 
   return (
     <div className="bg-cream/50 rounded-sm p-6 space-y-4">
@@ -68,7 +126,7 @@ function OrderSummary() {
           );
           return (
             <div key={`${item.product.id}-${item.selectedColor}-${item.selectedSize}`} className="flex gap-3">
-              <div className="relative w-14 h-18 bg-cream rounded-sm overflow-hidden shrink-0">
+              <div className="relative w-14 h-[72px] bg-cream overflow-hidden shrink-0">
                 <Image
                   src={colorObj?.image || item.product.colors[0]?.image || ''}
                   alt={item.product.name}
@@ -76,7 +134,7 @@ function OrderSummary() {
                   height={72}
                   className="object-cover w-full h-full"
                 />
-                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-navy text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-ink text-offwhite text-[10px] font-medium rounded-full flex items-center justify-center">
                   {item.quantity}
                 </span>
               </div>
@@ -104,14 +162,14 @@ function OrderSummary() {
           <span className="text-ink">{formatPrice(subtotal)}</span>
         </div>
         {discount > 0 && (
-          <div className="flex justify-between text-olive">
+          <div className="flex justify-between text-faded-olive">
             <span>Promo ({promoCode})</span>
             <span>-{formatPrice(discount)}</span>
           </div>
         )}
         <div className="flex justify-between">
           <span className="text-muted-foreground">Shipping</span>
-          <span className={shipping === 0 ? 'text-olive' : 'text-ink'}>
+          <span className={shipping === 0 ? 'text-faded-olive' : 'text-ink'}>
             {shipping === 0 ? 'Free' : formatPrice(shipping)}
           </span>
         </div>
@@ -124,13 +182,26 @@ function OrderSummary() {
 
       <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
         <Lock className="w-3 h-3" />
-        Secure checkout — this is a demo, no real payment is processed
+        Secure checkout
       </div>
     </div>
   );
 }
 
 // ─── Checkout Form ────────────────────────────────────────────────────────
+interface CheckoutFormData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
+  phone: string;
+  paymentMethod: string;
+  termsAccepted: boolean;
+}
+
 function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void }) {
   const [form, setForm] = useState<CheckoutFormData>({
     email: '',
@@ -142,20 +213,54 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
     pincode: '',
     phone: '',
     paymentMethod: 'cod',
+    termsAccepted: false,
   });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const update = (field: keyof CheckoutFormData, value: string) =>
+  const update = (field: keyof CheckoutFormData, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }));
+
+  const handleBlur = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const validationErrors = validateForm(form);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      // Set all fields as touched to show errors
+      const allTouched: Record<string, boolean> = {};
+      Object.keys(form).forEach((key) => { allTouched[key] = true; });
+      setTouched(allTouched);
+      return;
+    }
+
     onSubmit(form);
   };
 
-  const inputClass = 'h-10 rounded-sm bg-cream/30 border-sand text-sm';
+  const inputClass = (field: string) =>
+    cn(
+      'h-10 rounded-sm bg-cream/30 border-sand text-sm',
+      touched[field] && errors[field as keyof FormErrors] && 'border-clay'
+    );
+
+  const showError = (field: string) => touched[field] && errors[field as keyof FormErrors];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-8" noValidate>
+      {/* Demo Mode Notice */}
+      {storeConfig.isDemo && (
+        <div className="bg-sun-yellow/10 border border-sun-yellow/30 rounded-sm p-4 flex items-start gap-3">
+          <Info className="w-4 h-4 text-sun-yellow mt-0.5 shrink-0" />
+          <div className="text-xs text-ink/80">
+            <strong>Demo Mode</strong> — This is a demonstration checkout. No real payment will be processed and no items will be shipped. Your order will be saved locally for preview.
+          </div>
+        </div>
+      )}
+
       {/* Contact */}
       <div>
         <h2 className="font-[family-name:var(--font-instrument-serif)] text-xl text-ink mb-4">
@@ -172,9 +277,14 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.email}
               onChange={(e) => update('email', e.target.value)}
+              onBlur={() => handleBlur('email')}
               placeholder="you@example.com"
-              className={inputClass}
+              className={inputClass('email')}
+              autoComplete="email"
             />
+            {showError('email') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.email}</p>
+            )}
           </div>
           <div className="sm:col-span-2">
             <Label htmlFor="phone" className="text-xs text-muted-foreground mb-1.5 block">
@@ -186,9 +296,14 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.phone}
               onChange={(e) => update('phone', e.target.value)}
+              onBlur={() => handleBlur('phone')}
               placeholder="+91 98765 43210"
-              className={inputClass}
+              className={inputClass('phone')}
+              autoComplete="tel"
             />
+            {showError('phone') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.phone}</p>
+            )}
           </div>
         </div>
       </div>
@@ -210,8 +325,13 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.firstName}
               onChange={(e) => update('firstName', e.target.value)}
-              className={inputClass}
+              onBlur={() => handleBlur('firstName')}
+              className={inputClass('firstName')}
+              autoComplete="given-name"
             />
+            {showError('firstName') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.firstName}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="lastName" className="text-xs text-muted-foreground mb-1.5 block">
@@ -222,8 +342,13 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.lastName}
               onChange={(e) => update('lastName', e.target.value)}
-              className={inputClass}
+              onBlur={() => handleBlur('lastName')}
+              className={inputClass('lastName')}
+              autoComplete="family-name"
             />
+            {showError('lastName') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.lastName}</p>
+            )}
           </div>
           <div className="sm:col-span-2">
             <Label htmlFor="address" className="text-xs text-muted-foreground mb-1.5 block">
@@ -234,9 +359,14 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.address}
               onChange={(e) => update('address', e.target.value)}
+              onBlur={() => handleBlur('address')}
               placeholder="Street address, apartment, etc."
-              className={inputClass}
+              className={inputClass('address')}
+              autoComplete="street-address"
             />
+            {showError('address') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.address}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="city" className="text-xs text-muted-foreground mb-1.5 block">
@@ -247,8 +377,13 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.city}
               onChange={(e) => update('city', e.target.value)}
-              className={inputClass}
+              onBlur={() => handleBlur('city')}
+              className={inputClass('city')}
+              autoComplete="address-level2"
             />
+            {showError('city') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.city}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="state" className="text-xs text-muted-foreground mb-1.5 block">
@@ -259,8 +394,13 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.state}
               onChange={(e) => update('state', e.target.value)}
-              className={inputClass}
+              onBlur={() => handleBlur('state')}
+              className={inputClass('state')}
+              autoComplete="address-level1"
             />
+            {showError('state') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.state}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="pincode" className="text-xs text-muted-foreground mb-1.5 block">
@@ -271,9 +411,14 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
               required
               value={form.pincode}
               onChange={(e) => update('pincode', e.target.value)}
+              onBlur={() => handleBlur('pincode')}
               placeholder="400001"
-              className={inputClass}
+              className={inputClass('pincode')}
+              autoComplete="postal-code"
             />
+            {showError('pincode') && (
+              <p className="text-xs text-clay mt-1" role="alert">{errors.pincode}</p>
+            )}
           </div>
         </div>
       </div>
@@ -294,38 +439,65 @@ function CheckoutForm({ onSubmit }: { onSubmit: (data: CheckoutFormData) => void
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="cod">Cash on Delivery</SelectItem>
-            <SelectItem value="upi">UPI</SelectItem>
-            <SelectItem value="card">Credit / Debit Card</SelectItem>
-            <SelectItem value="netbanking">Net Banking</SelectItem>
+            {storeConfig.isDemo && (
+              <SelectItem value="upi" disabled>
+                UPI — Coming soon in production
+              </SelectItem>
+            )}
+            {storeConfig.isDemo && (
+              <SelectItem value="card" disabled>
+                Credit / Debit Card — Coming soon in production
+              </SelectItem>
+            )}
+            {storeConfig.isDemo && (
+              <SelectItem value="netbanking" disabled>
+                Net Banking — Coming soon in production
+              </SelectItem>
+            )}
+            {!storeConfig.isDemo && storeConfig.paymentMethods.upi && (
+              <SelectItem value="upi">UPI</SelectItem>
+            )}
+            {!storeConfig.isDemo && storeConfig.paymentMethods.razorpay && (
+              <SelectItem value="card">Credit / Debit Card</SelectItem>
+            )}
+            {!storeConfig.isDemo && storeConfig.paymentMethods.razorpay && (
+              <SelectItem value="netbanking">Net Banking</SelectItem>
+            )}
           </SelectContent>
         </Select>
-        <p className="text-[10px] text-muted-foreground mt-2">
-          This is a demo — no real payment will be processed.
-        </p>
+        {storeConfig.isDemo && (
+          <p className="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
+            <Info className="w-3 h-3" />
+            Online payment options will be available when the store goes live.
+          </p>
+        )}
       </div>
+
+      {/* Terms */}
+      <div className="flex items-start gap-3">
+        <Checkbox
+          id="terms"
+          checked={form.termsAccepted}
+          onCheckedChange={(checked) => update('termsAccepted', !!checked)}
+          className="data-[state=checked]:bg-ink data-[state=checked]:border-ink rounded-sm mt-0.5"
+        />
+        <Label htmlFor="terms" className="text-xs text-muted-foreground leading-relaxed cursor-pointer">
+          I agree to the terms and conditions, including the return policy ({storeConfig.returnWindow > 0 ? `${storeConfig.returnWindow}-day returns` : 'no returns'}). I understand that in demo mode, no real order is placed.
+        </Label>
+      </div>
+      {showError('terms') && (
+        <p className="text-xs text-clay -mt-4" role="alert">{errors.terms}</p>
+      )}
 
       <Button
         type="submit"
-        className="w-full h-12 bg-navy text-white hover:bg-navy/90 rounded-sm text-sm font-medium"
+        className="w-full h-12 bg-ink text-offwhite hover:bg-ink/90 rounded-sm text-sm font-medium min-h-[48px]"
       >
         <Lock className="w-4 h-4 mr-2" />
-        Place Order
+        {storeConfig.isDemo ? 'Place Demo Order' : 'Place Order'}
       </Button>
     </form>
   );
-}
-
-// ─── Types ────────────────────────────────────────────────────────────────
-interface CheckoutFormData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  state: string;
-  pincode: string;
-  phone: string;
-  paymentMethod: string;
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────
@@ -341,7 +513,7 @@ export default function CheckoutPage() {
     const subtotal = getSubtotal();
     const discount = getDiscount();
     const total = getTotal();
-    const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 99;
+    const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : storeConfig.shippingCost;
 
     const orderNumber = `DW-${Date.now().toString(36).toUpperCase()}`;
 
@@ -354,6 +526,11 @@ export default function CheckoutPage() {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
+          phone: data.phone,
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          pincode: data.pincode,
         },
         items: items.map((item) => ({
           name: item.product.name,
@@ -369,6 +546,7 @@ export default function CheckoutPage() {
         shipping,
         total: total + shipping,
         paymentMethod: data.paymentMethod,
+        isDemo: storeConfig.isDemo,
         createdAt: new Date().toISOString(),
       })
     );
@@ -431,7 +609,7 @@ export default function CheckoutPage() {
           {/* Form */}
           <div className="lg:col-span-2">
             <Reveal>
-              <div className="bg-white rounded-sm border border-sand/50 p-6">
+              <div className="bg-offwhite rounded-sm border border-sand/50 p-6">
                 <CheckoutForm onSubmit={handlePlaceOrder} />
               </div>
             </Reveal>

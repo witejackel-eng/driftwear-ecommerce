@@ -1,25 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Search, Heart, ShoppingBag, Menu } from "lucide-react";
+import { Search, ShoppingBag, Menu } from "lucide-react";
 import { triggerCartOpen } from "@/components/cart/CartDrawer";
-import { cn } from "@/lib/utils";
 import { useCartStore } from "@/store/cart-store";
-import { useWishlistStore } from "@/store/wishlist-store";
+import { cn } from "@/lib/utils";
 import { MegaMenu } from "@/components/layout/MegaMenu";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { SearchOverlay } from "@/components/shared/SearchOverlay";
 
 const navLinks = [
-  { label: "New", href: "/shop?collection=new" },
-  { label: "Women", href: "/shop/women", megaMenu: true, trigger: "Women" },
-  { label: "Men", href: "/shop/men", megaMenu: true, trigger: "Men" },
-  { label: "Best Sellers", href: "/shop?collection=best-sellers" },
+  { label: "New", href: "/shop?sort=newest" },
+  { label: "Women", href: "/shop/women", hasMegaMenu: true, megaTrigger: "Women" },
+  { label: "Men", href: "/shop/men", hasMegaMenu: true, megaTrigger: "Men" },
+  { label: "Best Sellers", href: "/shop/best-sellers" },
   { label: "Last Call", href: "/shop?collection=last-call", highlight: true },
   { label: "Story", href: "/about" },
-];
+] as const;
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -30,122 +28,166 @@ export function Header() {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
 
   const cartItems = useCartStore((s) => s.items);
-  const wishlistProductIds = useWishlistStore((s) => s.productIds);
   const totalCartItems = cartItems.reduce((sum, i) => sum + i.quantity, 0);
-  const totalWishlistItems = wishlistProductIds.length;
 
-  // Listen for scroll
+  const megaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearMegaTimeout = useCallback(() => {
+    if (megaTimeoutRef.current) {
+      clearTimeout(megaTimeoutRef.current);
+      megaTimeoutRef.current = null;
+    }
+  }, []);
+
+  const scheduleMegaClose = useCallback(() => {
+    clearMegaTimeout();
+    megaTimeoutRef.current = setTimeout(() => {
+      setMegaMenuOpen(false);
+      setActiveTrigger(undefined);
+    }, 150);
+  }, [clearMegaTimeout]);
+
+  // Scroll listener for header background transition
   useEffect(() => {
     function onScroll() {
       setScrolled(window.scrollY > 10);
     }
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleNavHover = (label: string) => {
-    const link = navLinks.find((l) => l.label === label);
-    if (link?.megaMenu) {
-      setActiveTrigger(link.trigger);
-      setMegaMenuOpen(true);
+  // Close mega menu on Escape
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape" && megaMenuOpen) {
+        clearMegaTimeout();
+        setMegaMenuOpen(false);
+        setActiveTrigger(undefined);
+      }
     }
-    setHoveredLink(label);
-  };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [megaMenuOpen, clearMegaTimeout]);
 
-  const handleNavLeave = () => {
+  const handleNavMouseEnter = useCallback(
+    (link: (typeof navLinks)[number]) => {
+      if (link.hasMegaMenu) {
+        clearMegaTimeout();
+        setActiveTrigger(link.megaTrigger!);
+        setMegaMenuOpen(true);
+      }
+      setHoveredLink(link.label);
+    },
+    [clearMegaTimeout]
+  );
+
+  const handleNavMouseLeave = useCallback(() => {
     setHoveredLink(null);
-  };
+    scheduleMegaClose();
+  }, [scheduleMegaClose]);
 
-  const handleMegaClose = () => {
+  const handleMegaMouseEnter = useCallback(() => {
+    clearMegaTimeout();
+  }, [clearMegaTimeout]);
+
+  const handleMegaMouseLeave = useCallback(() => {
+    scheduleMegaClose();
+  }, [scheduleMegaClose]);
+
+  const handleNavClick = useCallback(() => {
+    clearMegaTimeout();
     setMegaMenuOpen(false);
     setActiveTrigger(undefined);
-  };
+  }, [clearMegaTimeout]);
 
   return (
     <>
       <header
         className={cn(
-          "sticky top-0 z-50 w-full bg-offwhite/95 backdrop-blur-md transition-shadow duration-300",
-          scrolled ? "shadow-[0_1px_8px_rgba(31,58,74,0.06)]" : ""
+          "sticky top-0 z-[var(--z-header)] w-full transition-colors duration-300",
+          scrolled
+            ? "bg-offwhite/95 backdrop-blur-md shadow-[0_1px_0_0_var(--color-light-sand)]"
+            : "bg-offwhite"
         )}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="mx-auto max-w-[var(--container-wide)] px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-[4.25rem]">
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 -ml-2 rounded-md hover:bg-cream transition-colors"
+              className={cn(
+                "lg:hidden p-2 -ml-2 transition-colors duration-150",
+                "hover:bg-warm-paper",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink"
+              )}
               aria-label="Open menu"
             >
-              <Menu className="h-5 w-5 text-ink" />
+              <Menu className="h-5 w-5 text-deep-ink" />
             </button>
 
-            {/* Desktop nav left */}
-            <nav className="hidden lg:flex items-center gap-1">
+            {/* Desktop nav — left of logo */}
+            <nav className="hidden lg:flex items-center gap-0" aria-label="Main navigation">
               {navLinks.slice(0, 3).map((link) => (
                 <div
                   key={link.label}
-                  onMouseEnter={() => handleNavHover(link.label)}
-                  onMouseLeave={handleNavLeave}
+                  onMouseEnter={() => handleNavMouseEnter(link)}
+                  onMouseLeave={handleNavMouseLeave}
                 >
                   <Link
                     href={link.href}
-                    onClick={handleMegaClose}
+                    onClick={handleNavClick}
                     className={cn(
-                      "relative px-3 py-2 text-sm transition-colors",
+                      "relative block px-3.5 py-2 text-[13px] tracking-[0.01em] transition-colors duration-150",
                       link.highlight
-                        ? "text-terracotta font-medium"
-                        : "text-ink hover:text-terracotta"
+                        ? "text-clay font-medium"
+                        : "text-deep-ink/80 hover:text-deep-ink"
                     )}
                   >
                     {link.label}
                     {hoveredLink === link.label && (
-                      <motion.div
-                        layoutId="nav-underline"
-                        className="absolute bottom-0 left-3 right-3 h-0.5 bg-terracotta rounded-full"
-                        transition={{ duration: 0.2 }}
-                      />
+                      <span className="absolute bottom-0 left-3.5 right-3.5 h-px bg-clay" />
                     )}
                   </Link>
                 </div>
               ))}
             </nav>
 
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-1 shrink-0 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
-              <span className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-ink leading-none">
+            {/* Centered logo */}
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 shrink-0 lg:absolute lg:left-1/2 lg:-translate-x-1/2"
+              aria-label="Driftwear Studio — Home"
+            >
+              <span className="font-[family-name:var(--font-instrument-serif)] text-[1.55rem] md:text-3xl text-deep-ink leading-none tracking-[-0.01em]">
                 Driftwear
               </span>
-              <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mt-2 hidden sm:block">
+              <span className="text-[9px] uppercase tracking-[0.2em] text-muted-brown font-medium mt-2 hidden sm:block">
                 Studio
               </span>
             </Link>
 
-            {/* Desktop nav right */}
-            <nav className="hidden lg:flex items-center gap-1">
+            {/* Desktop nav — right of logo */}
+            <nav className="hidden lg:flex items-center gap-0" aria-label="Main navigation continued">
               {navLinks.slice(3).map((link) => (
                 <div
                   key={link.label}
-                  onMouseEnter={() => handleNavHover(link.label)}
-                  onMouseLeave={handleNavLeave}
+                  onMouseEnter={() => handleNavMouseEnter(link)}
+                  onMouseLeave={handleNavMouseLeave}
                 >
                   <Link
                     href={link.href}
-                    onClick={handleMegaClose}
+                    onClick={handleNavClick}
                     className={cn(
-                      "relative px-3 py-2 text-sm transition-colors",
+                      "relative block px-3.5 py-2 text-[13px] tracking-[0.01em] transition-colors duration-150",
                       link.highlight
-                        ? "text-terracotta font-medium"
-                        : "text-ink hover:text-terracotta"
+                        ? "text-clay font-medium"
+                        : "text-deep-ink/80 hover:text-deep-ink"
                     )}
                   >
                     {link.label}
                     {hoveredLink === link.label && (
-                      <motion.div
-                        layoutId="nav-underline"
-                        className="absolute bottom-0 left-3 right-3 h-0.5 bg-terracotta rounded-full"
-                        transition={{ duration: 0.2 }}
-                      />
+                      <span className="absolute bottom-0 left-3.5 right-3.5 h-px bg-clay" />
                     )}
                   </Link>
                 </div>
@@ -153,35 +195,38 @@ export function Header() {
             </nav>
 
             {/* Action icons */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               <button
                 onClick={() => setSearchOpen(true)}
-                className="p-2 rounded-md hover:bg-cream transition-colors"
-                aria-label="Search"
-              >
-                <Search className="h-5 w-5 text-ink" />
-              </button>
-              <Link
-                href="/wishlist"
-                className="relative p-2 rounded-md hover:bg-cream transition-colors"
-                aria-label="Wishlist"
-              >
-                <Heart className="h-5 w-5 text-ink" />
-                {totalWishlistItems > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-terracotta text-[10px] font-bold text-white leading-none">
-                    {totalWishlistItems > 9 ? "9+" : totalWishlistItems}
-                  </span>
+                className={cn(
+                  "p-2 transition-colors duration-150",
+                  "hover:bg-warm-paper",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink"
                 )}
-              </Link>
+                aria-label="Search products"
+              >
+                <Search className="h-[18px] w-[18px] text-deep-ink" />
+              </button>
               <button
                 onClick={triggerCartOpen}
-                className="relative p-2 rounded-md hover:bg-cream transition-colors"
-                aria-label="Open cart"
+                className={cn(
+                  "relative p-2 transition-colors duration-150",
+                  "hover:bg-warm-paper",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink"
+                )}
+                aria-label={`Open cart${totalCartItems > 0 ? `, ${totalCartItems} item${totalCartItems !== 1 ? "s" : ""}` : ""}`}
               >
-                <ShoppingBag className="h-5 w-5 text-ink" />
+                <ShoppingBag className="h-[18px] w-[18px] text-deep-ink" />
                 {totalCartItems > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-navy text-[10px] font-bold text-white leading-none">
-                    {totalCartItems > 9 ? "9+" : totalCartItems}
+                  <span
+                    className={cn(
+                      "absolute -top-0.5 -right-0.5 flex items-center justify-center",
+                      "h-4 min-w-4 px-1 rounded-full",
+                      "bg-clay text-offwhite text-[10px] font-semibold leading-none"
+                    )}
+                    aria-hidden="true"
+                  >
+                    {totalCartItems > 99 ? "99+" : totalCartItems}
                   </span>
                 )}
               </button>
@@ -189,17 +234,15 @@ export function Header() {
           </div>
         </div>
 
-        {/* MegaMenu - desktop only */}
+        {/* MegaMenu — desktop only */}
         <div
           className="hidden lg:block"
-          onMouseEnter={() => {
-            if (activeTrigger) setMegaMenuOpen(true);
-          }}
-          onMouseLeave={handleMegaClose}
+          onMouseEnter={handleMegaMouseEnter}
+          onMouseLeave={handleMegaMouseLeave}
         >
           <MegaMenu
             open={megaMenuOpen}
-            onClose={handleMegaClose}
+            onClose={handleNavClick}
             activeTrigger={activeTrigger}
           />
         </div>

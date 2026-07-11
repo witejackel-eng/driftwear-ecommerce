@@ -1,18 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Image from 'next/image';
-import { Minus, Plus, ShoppingBag } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Product } from '@/lib/types';
-import { cn, formatPrice } from '@/lib/utils';
+import { cn, formatPrice, getDiscountPercentage } from '@/lib/utils';
 import { useCartStore } from '@/store/cart-store';
+import { triggerCartOpen } from '@/components/cart/CartDrawer';
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
 } from '@/components/ui/sheet';
 
 interface QuickAddProps {
@@ -31,6 +29,15 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
 
   const currentColor = product.colors.find((c) => c.name === selectedColor) ?? product.colors[0];
   const displayImage = currentColor?.image ?? product.images[0];
+  const hasDiscount = product.isSale && product.compareAtPrice;
+
+  const resetAndAdd = useCallback(() => {
+    setSelectedColor(product.colors[0]?.name ?? '');
+    setSelectedSize('');
+    setQuantity(1);
+    setSizeError(false);
+    setJustAdded(false);
+  }, [product.colors]);
 
   const handleAddToBag = () => {
     if (!selectedSize) {
@@ -42,13 +49,14 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
 
     // Open cart drawer after a brief delay
     setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('open-cart-drawer'));
-    }, 300);
+      triggerCartOpen();
+    }, 200);
 
-    // Close quick add
+    // Close quick add and reset state
     setTimeout(() => {
       onOpenChange(false);
-    }, 600);
+      resetAndAdd();
+    }, 500);
   };
 
   return (
@@ -56,7 +64,7 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
       <SheetContent side="right" className="w-full sm:max-w-md bg-offwhite p-0 overflow-y-auto scrollbar-thin">
         <div className="pt-12 pb-6 px-6">
           {/* Product Image */}
-          <div className="relative aspect-[3/4] w-full max-w-[200px] mx-auto rounded-md overflow-hidden bg-cream mb-6">
+          <div className="relative aspect-[4/5] w-full max-w-[220px] mx-auto overflow-hidden bg-cream mb-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentColor?.name}
@@ -71,7 +79,7 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
                   alt={product.name}
                   fill
                   className="object-cover"
-                  sizes="200px"
+                  sizes="220px"
                 />
               </motion.div>
             </AnimatePresence>
@@ -83,10 +91,15 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
             <p className="text-sm text-muted-foreground mt-0.5">{product.subtitle}</p>
             <div className="flex items-center justify-center gap-2 mt-2">
               <span className="font-medium text-ink">{formatPrice(product.price)}</span>
-              {product.isSale && product.compareAtPrice && (
-                <span className="text-sm text-muted-foreground line-through">
-                  {formatPrice(product.compareAtPrice)}
-                </span>
+              {hasDiscount && (
+                <>
+                  <span className="text-sm text-muted-foreground line-through">
+                    {formatPrice(product.compareAtPrice!)}
+                  </span>
+                  <span className="text-xs font-medium text-clay">
+                    {getDiscountPercentage(product.price, product.compareAtPrice!)}% off
+                  </span>
+                </>
               )}
             </div>
           </div>
@@ -95,7 +108,7 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
           {product.colors.length > 1 && (
             <div className="mb-5">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-ink">Color</span>
+                <span className="text-sm font-medium text-ink">Colour</span>
                 <span className="text-xs text-muted-foreground">{selectedColor}</span>
               </div>
               <div className="flex gap-2">
@@ -106,7 +119,7 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
                     className={cn(
                       'h-8 w-8 rounded-full border-2 transition-all',
                       selectedColor === color.name
-                        ? 'border-navy ring-2 ring-navy/20 scale-110'
+                        ? 'border-ink ring-2 ring-ink/20 scale-110'
                         : 'border-sand hover:border-ink/30'
                     )}
                     style={{ backgroundColor: color.hex }}
@@ -126,7 +139,7 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
                 <motion.span
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-xs text-terracotta"
+                  className="text-xs text-clay"
                 >
                   Please select a size
                 </motion.span>
@@ -141,9 +154,9 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
                     setSizeError(false);
                   }}
                   className={cn(
-                    'h-10 rounded-md border text-sm font-medium transition-all',
+                    'h-10 min-h-[44px] rounded-sm border text-sm font-medium transition-all',
                     selectedSize === size
-                      ? 'border-navy bg-navy text-white'
+                      ? 'bg-ink text-offwhite border-ink'
                       : 'border-sand bg-offwhite text-ink hover:border-ink/30'
                   )}
                 >
@@ -156,10 +169,10 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
           {/* Quantity Selector */}
           <div className="mb-6">
             <span className="text-sm font-medium text-ink block mb-2">Quantity</span>
-            <div className="inline-flex items-center border border-sand rounded-md">
+            <div className="inline-flex items-center border border-sand rounded-sm">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="flex h-10 w-10 items-center justify-center text-ink hover:bg-cream transition-colors rounded-l-md"
+                className="flex h-10 w-10 items-center justify-center text-ink hover:bg-cream transition-colors rounded-l-sm"
                 aria-label="Decrease quantity"
               >
                 <Minus className="h-4 w-4" />
@@ -169,7 +182,7 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
               </span>
               <button
                 onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                className="flex h-10 w-10 items-center justify-center text-ink hover:bg-cream transition-colors rounded-r-md"
+                className="flex h-10 w-10 items-center justify-center text-ink hover:bg-cream transition-colors rounded-r-sm"
                 aria-label="Increase quantity"
               >
                 <Plus className="h-4 w-4" />
@@ -180,11 +193,12 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
           {/* Add to Bag Button */}
           <button
             onClick={handleAddToBag}
+            disabled={justAdded}
             className={cn(
-              'flex w-full items-center justify-center gap-2 rounded-md py-3 text-sm font-medium transition-all',
+              'flex w-full items-center justify-center gap-2 rounded-sm py-3.5 text-sm font-medium transition-all min-h-[44px]',
               justAdded
-                ? 'bg-olive text-white'
-                : 'bg-navy text-white hover:bg-navy/90'
+                ? 'bg-faded-olive text-white'
+                : 'bg-ink text-offwhite hover:bg-ink/90'
             )}
           >
             <AnimatePresence mode="wait">
@@ -197,7 +211,10 @@ export function QuickAdd({ product, open, onOpenChange }: QuickAddProps) {
                 className="flex items-center gap-2"
               >
                 {justAdded ? (
-                  <>Added ✓</>
+                  <>
+                    <Check className="h-4 w-4" />
+                    Added to Bag
+                  </>
                 ) : (
                   <>
                     <ShoppingBag className="h-4 w-4" />

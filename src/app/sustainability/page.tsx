@@ -1,17 +1,16 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Leaf, Package, Recycle, Wrench } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Container } from '@/components/shared/Container';
-import { SectionHeader } from '@/components/shared/SectionHeader';
 import { Reveal } from '@/components/shared/Reveal';
 import { generateSEOMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = generateSEOMetadata({
-  title: 'Sustainability',
+  title: 'Material & Care Transparency',
   description:
-    'Honest thoughts on responsibility from Driftwear Studio. No greenwashing, no invented certifications — just what we would do if we were a real brand.',
+    'Honest information about the fabrics, processes, and care behind Driftwear Studio clothing. No greenwashing — just what we use and why.',
   path: '/sustainability',
 });
 
@@ -19,46 +18,44 @@ export default function SustainabilityPage() {
   return (
     <main className="flex-1">
       {/* Hero */}
-      <section className="relative h-[50vh] md:h-[60vh] bg-cream overflow-hidden">
+      <section className="relative h-[50vh] overflow-hidden">
         <Image
-          src="/images/sustainability/packaging.jpg"
-          alt="Sustainable packaging materials"
+          src="/images/sustainability/fabric.jpg"
+          alt="Natural linen fabric in soft light"
           fill
-          className="object-cover opacity-70"
+          className="object-cover"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-navy/40" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Container className="text-center">
+        <div className="absolute inset-0 bg-deep-ink/25" />
+        <div className="absolute inset-0 flex items-end">
+          <Container className="pb-10 md:pb-14">
             <Reveal>
-              <h1 className="font-[family-name:var(--font-instrument-serif)] text-4xl md:text-5xl lg:text-6xl text-white mb-4">
-                Sustainability
-              </h1>
-              <p className="text-white/80 text-sm md:text-base max-w-lg mx-auto">
-                Honest thoughts on doing things a little better. No greenwashing, we promise.
+              <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+                Transparency
               </p>
+              <h1 className="font-[family-name:var(--font-instrument-serif)] text-4xl md:text-5xl lg:text-6xl text-offwhite leading-tight">
+                Material &amp; Care
+              </h1>
             </Reveal>
           </Container>
         </div>
       </section>
 
       {/* Intro */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 bg-offwhite">
         <Container>
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-2xl mx-auto text-center">
             <Reveal>
-              <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-sm text-muted-brown leading-relaxed">
                 <p>
-                  We&apos;re going to be straight with you: this is a demo website. But if
-                  Driftwear Studio were a real brand, here&apos;s how we&apos;d think about
-                  sustainability — not as a marketing tool, but as a genuine responsibility.
+                  We think you deserve to know what your clothes are made of, how
+                  they&apos;re made, and how to make them last. This page covers
+                  exactly that — no invented certifications, no vague commitments.
                 </p>
                 <p>
-                  We don&apos;t claim to have all the answers. We&apos;re not claiming to be
-                  organic, or recycled, or B-Corp certified (because we aren&apos;t any of those
-                  things — yet). What we do claim is a genuine desire to make clothes in a way
-                  that doesn&apos;t make us cringe.
+                  We&apos;re working toward more sustainable practices. In the
+                  meantime, here&apos;s what we can honestly tell you.
                 </p>
               </div>
             </Reveal>
@@ -66,137 +63,50 @@ export default function SustainabilityPage() {
         </Container>
       </section>
 
-      {/* What we would measure */}
-      <section className="py-16 md:py-24 bg-cream">
-        <Container>
-          <SectionHeader
-            title="What we would measure"
-            subtitle="The metrics that actually matter — not the ones that look good in a report."
-            align="center"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl mx-auto">
-            {[
-              {
-                icon: Leaf,
-                title: 'Carbon per garment',
-                description:
-                  "We'd calculate the full lifecycle carbon footprint of each piece — from raw material to your doorstep — and publish it transparently. Not to brag, but so we (and you) can see where to improve.",
-              },
-              {
-                icon: Recycle,
-                title: 'Waste percentage',
-                description:
-                  "How much fabric ends up in the bin during production? We'd track this obsessively and work to bring it as close to zero as possible. Zero-waste pattern cutting isn't easy, but it's worth pursuing.",
-              },
-              {
-                icon: Package,
-                title: 'Packaging materials',
-                description:
-                  "Every shipping bag, every tag, every tissue paper — we'd audit it all. Goal: 100% plastic-free, 100% recyclable or compostable. No microplastics hiding in your mailer.",
-              },
-              {
-                icon: Wrench,
-                title: 'Garment longevity',
-                description:
-                  "The most sustainable garment is the one you wear 100 times. We'd track how our pieces hold up over months and years of real wear, then use that data to make the next batch even better.",
-              },
-            ].map((item, i) => (
-              <Reveal key={item.title} delay={i * 0.08}>
-                <div className="bg-white rounded-sm p-6 h-full">
-                  <item.icon className="w-6 h-6 text-olive mb-4" />
-                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-xl text-ink mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* Fabric Transparency */}
+      {/* Section 1: Our Materials */}
       <section className="py-16 md:py-24">
         <Container>
-          <div className="max-w-3xl mx-auto">
-            <Reveal>
-              <SectionHeader
-                title="Fabric transparency"
-                subtitle="Where our materials come from and why we chose them."
-                align="center"
-              />
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-                <p>
-                  We believe you should know what&apos;s touching your skin. Every product page
-                  lists the exact fabric composition, weight, and origin. Here&apos;s the general
-                  idea:
-                </p>
-                <p>
-                  <strong className="text-ink">Linen</strong> — We use European flax linen,
-                  garment-washed for softness. Linen is naturally biodegradable, requires less
-                  water than cotton, and gets softer with every wash. It&apos;s not the cheapest
-                  option, but it&apos;s the right one.
-                </p>
-                <p>
-                  <strong className="text-ink">Organic Cotton</strong> — Grown without synthetic
-                  pesticides or fertilizers. We specify the GSM (grams per square meter) because
-                  weight matters — a 220gsm tee feels very different from a 150gsm one, and
-                  you deserve to know the difference.
-                </p>
-                <p>
-                  <strong className="text-ink">Tencel™ Lyocell</strong> — Made from sustainably
-                  sourced wood pulp in a closed-loop process that recycles water and solvents.
-                  It&apos;s incredibly soft, drapes beautifully, and is biodegradable.
-                </p>
-                <p>
-                  We don&apos;t use virgin polyester, acrylic, or nylon in any of our main
-                  collections. If we ever do, we&apos;ll explain exactly why and what
-                  alternatives we considered.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      {/* Lower-waste packaging */}
-      <section className="py-16 md:py-24 bg-cream">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <Reveal direction="left">
-              <div className="relative aspect-[4/5] bg-cream rounded-sm overflow-hidden">
+              <div className="relative aspect-[4/5] bg-warm-paper overflow-hidden">
                 <Image
-                  src="/images/sustainability/packaging.jpg"
-                  alt="Eco-friendly packaging"
+                  src="/images/fabric/soft.jpg"
+                  alt="Pre-washed linen fabric texture"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
             </Reveal>
             <Reveal direction="right" delay={0.1}>
               <div>
-                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-ink mb-4">
-                  Lower-waste packaging
+                <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+                  Our Materials
+                </p>
+                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink leading-snug mb-6">
+                  Linen &amp; cotton — chosen for warm climates
                 </h2>
-                <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+                <div className="space-y-4 text-sm text-muted-brown leading-relaxed">
                   <p>
-                    Your order arrives in a mailer made from recycled kraft paper — no plastic
-                    poly mailers, no bubble wrap. Garments are wrapped in tissue paper and
-                    protected with recycled paper stuffing instead of foam peanuts.
+                    <strong className="text-deep-ink">Linen</strong> — Our primary
+                    fabric. Linen is made from the flax plant, requires less water
+                    than cotton to grow, and is naturally biodegradable. It gets
+                    softer with every wash and is one of the most breathable fabrics
+                    available — ideal for Indian summers. We specify the GSM (weight)
+                    on each product page because weight affects how a garment drapes
+                    and wears.
                   </p>
                   <p>
-                    Tags are made from recycled paper with soy-based ink. Size labels are printed
-                    directly on the garment to reduce waste. Even the thank-you card is
-                    plantable — stick it in soil and wildflowers will grow (hypothetically).
+                    <strong className="text-deep-ink">Cotton</strong> — Used in
+                    select pieces where we want a softer, smoother hand feel. Cotton
+                    is familiar, comfortable, and easy to care for. We specify the
+                    fabric weight for every cotton piece so you know exactly what
+                    you&apos;re getting.
                   </p>
                   <p>
-                    It costs us more than plastic, but we think it&apos;s worth it. And if you
-                    have ideas for doing it even better, we&apos;re all ears.
+                    Every product page lists the exact fabric composition and weight.
+                    We don&apos;t use vague terms like &ldquo;premium blend&rdquo; —
+                    you&apos;ll see the real breakdown.
                   </p>
                 </div>
               </div>
@@ -205,57 +115,182 @@ export default function SustainabilityPage() {
         </Container>
       </section>
 
-      {/* Repair and resale */}
-      <section className="py-16 md:py-24">
+      {/* Section 2: How We Make Things */}
+      <section className="py-16 md:py-24 bg-warm-paper">
         <Container>
           <div className="max-w-3xl mx-auto">
             <Reveal>
-              <SectionHeader
-                title="Repair and resale ideas"
-                subtitle="Clothes that last longer are better for everyone."
-                align="center"
-              />
+              <div className="text-center mb-12">
+                <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+                  How We Make Things
+                </p>
+                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink leading-snug">
+                  What &ldquo;soft from day one&rdquo; actually means
+                </h2>
+              </div>
             </Reveal>
-            <Reveal delay={0.1}>
-              <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-                <p>
-                  The most sustainable thing we can do as a brand is make clothes that last long
-                  enough to be loved, not just worn. But when things do wear out, we have ideas:
+
+            <div className="space-y-8">
+              <Reveal delay={0.05}>
+                <div className="flex gap-6">
+                  <span className="font-[family-name:var(--font-instrument-serif)] text-clay text-2xl shrink-0 w-8">
+                    01
+                  </span>
+                  <div>
+                    <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-deep-ink mb-2">
+                      Pre-washing
+                    </h3>
+                    <p className="text-sm text-muted-brown leading-relaxed">
+                      Every garment goes through a pre-wash process before it reaches you.
+                      This does two things: it softens the fabric so it feels
+                      broken-in immediately, and it pre-shrinks the garment so your
+                      correct size stays your correct size after the first wash at
+                      home. No surprises.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.1}>
+                <div className="flex gap-6">
+                  <span className="font-[family-name:var(--font-instrument-serif)] text-clay text-2xl shrink-0 w-8">
+                    02
+                  </span>
+                  <div>
+                    <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-deep-ink mb-2">
+                      Fabric selection
+                    </h3>
+                    <p className="text-sm text-muted-brown leading-relaxed">
+                      We choose fabrics for how they perform in warm, humid conditions.
+                      Breathability, weight, and drape are the deciding factors — not
+                      marketing appeal. We handle and wash-test fabrics before committing
+                      to them in a collection.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.15}>
+                <div className="flex gap-6">
+                  <span className="font-[family-name:var(--font-instrument-serif)] text-clay text-2xl shrink-0 w-8">
+                    03
+                  </span>
+                  <div>
+                    <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-deep-ink mb-2">
+                      Fewer pieces, better made
+                    </h3>
+                    <p className="text-sm text-muted-brown leading-relaxed">
+                      We release small collections rather than large seasonal drops.
+                      This means more attention per style, better quality control,
+                      and less wasted inventory. We&apos;d rather make one shirt
+                      really well than ten passable ones.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Section 3: Caring for Your Clothes */}
+      <section className="py-16 md:py-24">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <Reveal direction="left">
+              <div>
+                <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+                  Caring for Your Clothes
                 </p>
-                <p>
-                  <strong className="text-ink">Repair guide</strong> — We&apos;d publish free
-                  repair guides for common issues: resewn buttons, patching elbows, fixing hem
-                  unraveling. Simple stuff that extends a garment&apos;s life by years.
-                </p>
-                <p>
-                  <strong className="text-ink">Take-back program</strong> — When you&apos;re
-                  done with a Driftwear piece (even if it took 5 years — that&apos;s the goal),
-                  send it back. We&apos;d clean, repair if needed, and resell it at a discount,
-                  or responsibly recycle what can&apos;t be saved.
-                </p>
-                <p>
-                  <strong className="text-ink">Second-life marketplace</strong> — A dedicated
-                  section on our site for pre-owned Driftwear pieces. Same quality standards, just
-                  with a story already attached. Because a good linen shirt deserves more than one
-                  life.
-                </p>
+                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink leading-snug mb-6">
+                  The most sustainable garment is the one you wear often
+                </h2>
+                <div className="space-y-4 text-sm text-muted-brown leading-relaxed">
+                  <p>
+                    How you wash and store your clothes has a bigger impact on their
+                    lifespan than most people realise. A well-cared-for linen shirt can
+                    last years. Here are some straightforward tips:
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex gap-3">
+                      <span className="text-faded-olive shrink-0">—</span>
+                      <span>
+                        <strong className="text-deep-ink">Wash cold</strong> —
+                        Machine wash on a gentle, cold cycle. Hot water weakens fibers
+                        over time and causes colors to fade faster.
+                      </span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="text-faded-olive shrink-0">—</span>
+                      <span>
+                        <strong className="text-deep-ink">Air dry when you can</strong> —
+                        Tumble drying is fine occasionally, but air drying extends
+                        fabric life significantly. Linen actually benefits from it.
+                      </span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="text-faded-olive shrink-0">—</span>
+                      <span>
+                        <strong className="text-deep-ink">Store properly</strong> —
+                        Fold knits and tees. Hang linen shirts and dresses to avoid
+                        deep creases. Keep away from direct sunlight to prevent
+                        fading.
+                      </span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="text-faded-olive shrink-0">—</span>
+                      <span>
+                        <strong className="text-deep-ink">Wash less often</strong> —
+                        Not every wear requires a full wash. Airing out a garment
+                        between wears can keep it fresh and extend its life.
+                      </span>
+                    </li>
+                  </ul>
+                  <p>
+                    Detailed care instructions are included on every product page and
+                    on the garment label.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal direction="right" delay={0.1}>
+              <div className="relative aspect-[4/5] bg-warm-paper overflow-hidden">
+                <Image
+                  src="/images/fabric/wash.jpg"
+                  alt="Linen fabric drying in natural light"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
               </div>
             </Reveal>
           </div>
         </Container>
       </section>
 
-      {/* Demo disclaimer */}
-      <section className="py-12 bg-sun-yellow/10">
+      {/* Honest statement */}
+      <section className="py-16 md:py-24 bg-warm-paper">
         <Container>
           <div className="max-w-2xl mx-auto text-center">
             <Reveal>
-              <p className="text-sm text-ink/70 leading-relaxed">
-                <strong>Demo notice:</strong> This page shows how a brand can communicate
-                responsibility without inventing certifications or making unsubstantiated claims.
-                None of the programs or measurements described above currently exist — they
-                represent what we believe honest sustainability communication should look like.
-              </p>
+              <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink leading-snug mb-6">
+                Where we&apos;re headed
+              </h2>
+              <div className="space-y-4 text-sm text-muted-brown leading-relaxed">
+                <p>
+                  We&apos;re not going to pretend we have all the answers. We
+                  don&apos;t hold organic certifications or run closed-loop
+                  production facilities. What we do is focus on natural fibers,
+                  make garments that last, and share honest information about
+                  what goes into each piece.
+                </p>
+                <p>
+                  We&apos;re working toward more sustainable practices — better
+                  packaging, responsible sourcing, and transparency about our
+                  supply chain. When we make meaningful progress, we&apos;ll
+                  share it here. When we don&apos;t, we&apos;ll say that too.
+                </p>
+              </div>
             </Reveal>
           </div>
         </Container>
@@ -265,15 +300,15 @@ export default function SustainabilityPage() {
       <section className="py-16 md:py-24">
         <Container className="text-center">
           <Reveal>
-            <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-ink mb-4">
-              See what we&apos;re (hypothetically) making
+            <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink mb-4">
+              Browse the collection
             </h2>
-            <p className="text-sm text-muted-foreground mb-8 max-w-md mx-auto">
-              Browse our collection of everyday essentials.
+            <p className="text-sm text-muted-brown mb-8 max-w-md mx-auto">
+              See the fabrics and care details for every piece in our range.
             </p>
             <Button
               asChild
-              className="bg-navy text-white hover:bg-navy/90 rounded-sm"
+              className="bg-deep-ink text-offwhite hover:bg-deep-ink/90 rounded-sm"
             >
               <Link href="/shop">
                 Shop Now <ArrowRight className="w-4 h-4 ml-2" />

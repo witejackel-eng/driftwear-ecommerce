@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Send, Mail, MapPin, Phone, MessageCircle } from 'lucide-react';
+import { Send, Mail, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -24,6 +24,26 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Container } from '@/components/shared/Container';
 import { Reveal } from '@/components/shared/Reveal';
+import { storeConfig } from '@/lib/store-config';
+
+type FormState = 'idle' | 'loading' | 'success' | 'error';
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  reason?: string;
+  message?: string;
+}
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const reasonOptions = [
+  { value: 'order-issue', label: 'Order Issue' },
+  { value: 'sizing', label: 'Sizing' },
+  { value: 'returns', label: 'Returns' },
+  { value: 'general', label: 'General Question' },
+  { value: 'other', label: 'Other' },
+] as const;
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -33,24 +53,67 @@ export default function ContactPage() {
     reason: '',
     message: '',
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [formState, setFormState] = useState<FormState>('idle');
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [serverMessage, setServerMessage] = useState('');
 
-  const update = (field: string, value: string) =>
+  const update = useCallback((field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+    setFormErrors((prev) => ({ ...prev, [field]: undefined }));
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validate = useCallback((): boolean => {
+    const errors: FormErrors = {};
+    if (!form.name.trim()) errors.name = 'Name is required';
+    if (!form.email.trim()) errors.email = 'Email is required';
+    else if (!EMAIL_REGEX.test(form.email)) errors.email = 'Please enter a valid email';
+    if (!form.reason) errors.reason = 'Please select a reason';
+    if (!form.message.trim()) errors.message = 'Message is required';
+    else if (form.message.trim().length < 10) errors.message = 'Message must be at least 10 characters';
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  }, [form]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Save to localStorage as demo
+    if (!validate()) return;
+
+    setFormState('loading');
+    setServerMessage('');
+
     try {
-      const messages = JSON.parse(
-        localStorage.getItem('driftwear_contact_messages') || '[]'
-      );
-      messages.push({ ...form, createdAt: new Date().toISOString() });
-      localStorage.setItem('driftwear_contact_messages', JSON.stringify(messages));
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          orderNumber: form.orderNumber.trim() || undefined,
+          reason: form.reason,
+          message: form.message.trim(),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setFormState('success');
+        setServerMessage(data.message);
+      } else {
+        setFormState('error');
+        setServerMessage(data.message || 'Something went wrong. Please try again.');
+      }
     } catch {
-      // ignore
+      setFormState('error');
+      setServerMessage('Could not connect to the server. Please check your connection and try again.');
     }
-    setSubmitted(true);
+  };
+
+  const resetForm = () => {
+    setForm({ name: '', email: '', orderNumber: '', reason: '', message: '' });
+    setFormErrors({});
+    setServerMessage('');
+    setFormState('idle');
   };
 
   return (
@@ -72,12 +135,15 @@ export default function ContactPage() {
         </Reveal>
 
         <Reveal>
-          <h1 className="font-[family-name:var(--font-instrument-serif)] text-3xl md:text-4xl text-ink mb-4">
+          <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+            Help
+          </p>
+          <h1 className="font-[family-name:var(--font-instrument-serif)] text-3xl md:text-4xl text-deep-ink leading-tight mb-4">
             Get in Touch
           </h1>
-          <p className="text-sm text-muted-foreground mb-10 max-w-xl">
-            Have a question, issue, or just want to say hi? Fill out the form below and
-            we&apos;ll get back to you as soon as we can.
+          <p className="text-sm text-muted-brown mb-10 max-w-xl">
+            Have a question, issue, or just want to say hi? Fill out the form
+            below and we&apos;ll get back to you as soon as we can.
           </p>
         </Reveal>
 
@@ -85,41 +151,34 @@ export default function ContactPage() {
           {/* Form */}
           <div className="lg:col-span-2">
             <Reveal>
-              {submitted ? (
-                <div className="bg-olive/10 rounded-sm p-8 text-center">
-                  <MessageCircle className="w-10 h-10 text-olive mx-auto mb-4" />
-                  <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl text-ink mb-2">
-                    Message saved!
+              {formState === 'success' ? (
+                <div className="bg-warm-paper p-8 md:p-12 text-center">
+                  <CheckCircle className="w-10 h-10 text-faded-olive mx-auto mb-4" />
+                  <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl text-deep-ink mb-2">
+                    Thank you
                   </h2>
-                  <p className="text-sm text-muted-foreground mb-1">
-                    Message saved as demo. Connect an email service before production.
+                  <p className="text-sm text-muted-brown mb-1">
+                    {serverMessage}
                   </p>
-                  <p className="text-xs text-muted-foreground mb-6">
-                    In a real store, this would be sent to our support team.
+                  <p className="text-xs text-muted-brown mb-8">
+                    {storeConfig.isDemo
+                      ? 'This is a demo, so no email was sent.'
+                      : 'We typically respond within 1–2 business days.'}
                   </p>
                   <Button
                     variant="outline"
-                    className="rounded-sm"
-                    onClick={() => {
-                      setSubmitted(false);
-                      setForm({
-                        name: '',
-                        email: '',
-                        orderNumber: '',
-                        reason: '',
-                        message: '',
-                      });
-                    }}
+                    className="rounded-sm border-deep-ink text-deep-ink hover:bg-deep-ink hover:text-offwhite"
+                    onClick={resetForm}
                   >
                     Send another message
                   </Button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6 max-w-xl">
+                <form onSubmit={handleSubmit} className="space-y-6 max-w-xl" noValidate>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="name" className="text-xs text-muted-foreground mb-1.5 block">
-                        Name *
+                      <Label htmlFor="name" className="text-xs text-muted-brown mb-1.5 block">
+                        Name <span className="text-clay">*</span>
                       </Label>
                       <Input
                         id="name"
@@ -127,12 +186,20 @@ export default function ContactPage() {
                         value={form.name}
                         onChange={(e) => update('name', e.target.value)}
                         placeholder="Your name"
-                        className="h-10 rounded-sm bg-cream/30 border-sand"
+                        aria-invalid={!!formErrors.name}
+                        aria-describedby={formErrors.name ? 'name-error' : undefined}
+                        className="h-11 rounded-sm bg-offwhite border-light-sand focus:border-clay"
                       />
+                      {formErrors.name && (
+                        <p id="name-error" className="text-xs text-clay mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {formErrors.name}
+                        </p>
+                      )}
                     </div>
                     <div>
-                      <Label htmlFor="email" className="text-xs text-muted-foreground mb-1.5 block">
-                        Email *
+                      <Label htmlFor="email" className="text-xs text-muted-brown mb-1.5 block">
+                        Email <span className="text-clay">*</span>
                       </Label>
                       <Input
                         id="email"
@@ -141,52 +208,67 @@ export default function ContactPage() {
                         value={form.email}
                         onChange={(e) => update('email', e.target.value)}
                         placeholder="you@example.com"
-                        className="h-10 rounded-sm bg-cream/30 border-sand"
+                        aria-invalid={!!formErrors.email}
+                        aria-describedby={formErrors.email ? 'email-error' : undefined}
+                        className="h-11 rounded-sm bg-offwhite border-light-sand focus:border-clay"
                       />
+                      {formErrors.email && (
+                        <p id="email-error" className="text-xs text-clay mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {formErrors.email}
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label
-                        htmlFor="orderNumber"
-                        className="text-xs text-muted-foreground mb-1.5 block"
-                      >
-                        Order Number (optional)
+                      <Label htmlFor="orderNumber" className="text-xs text-muted-brown mb-1.5 block">
+                        Order Number
                       </Label>
                       <Input
                         id="orderNumber"
                         value={form.orderNumber}
                         onChange={(e) => update('orderNumber', e.target.value)}
-                        placeholder="DW-XXXXXX"
-                        className="h-10 rounded-sm bg-cream/30 border-sand"
+                        placeholder="DW-XXXXXX (optional)"
+                        className="h-11 rounded-sm bg-offwhite border-light-sand focus:border-clay"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="reason" className="text-xs text-muted-foreground mb-1.5 block">
-                        Reason *
+                      <Label htmlFor="reason" className="text-xs text-muted-brown mb-1.5 block">
+                        Reason <span className="text-clay">*</span>
                       </Label>
                       <Select
                         value={form.reason}
                         onValueChange={(v) => update('reason', v)}
-                        required
                       >
-                        <SelectTrigger className="h-10 rounded-sm bg-cream/30 border-sand">
+                        <SelectTrigger
+                          className="h-11 rounded-sm bg-offwhite border-light-sand focus:border-clay"
+                          aria-invalid={!!formErrors.reason}
+                          aria-describedby={formErrors.reason ? 'reason-error' : undefined}
+                        >
                           <SelectValue placeholder="Select a reason" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="order-issue">Order Issue</SelectItem>
-                          <SelectItem value="sizing">Sizing</SelectItem>
-                          <SelectItem value="returns">Returns</SelectItem>
-                          <SelectItem value="general">General</SelectItem>
+                          {reasonOptions.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
+                      {formErrors.reason && (
+                        <p id="reason-error" className="text-xs text-clay mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {formErrors.reason}
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="message" className="text-xs text-muted-foreground mb-1.5 block">
-                      Message *
+                    <Label htmlFor="message" className="text-xs text-muted-brown mb-1.5 block">
+                      Message <span className="text-clay">*</span>
                     </Label>
                     <Textarea
                       id="message"
@@ -195,16 +277,50 @@ export default function ContactPage() {
                       onChange={(e) => update('message', e.target.value)}
                       placeholder="Tell us what's on your mind..."
                       rows={5}
-                      className="rounded-sm bg-cream/30 border-sand resize-none"
+                      aria-invalid={!!formErrors.message}
+                      aria-describedby={formErrors.message ? 'message-error' : undefined}
+                      className="rounded-sm bg-offwhite border-light-sand focus:border-clay resize-none"
                     />
+                    <div className="flex justify-between mt-1">
+                      {formErrors.message ? (
+                        <p id="message-error" className="text-xs text-clay flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {formErrors.message}
+                        </p>
+                      ) : (
+                        <span />
+                      )}
+                      <span className="text-xs text-muted-brown">
+                        {form.message.trim().length} / 2000
+                      </span>
+                    </div>
                   </div>
+
+                  {formState === 'error' && serverMessage && (
+                    <div className="bg-clay/10 border border-clay/20 rounded-sm p-4">
+                      <p className="text-sm text-clay flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                        {serverMessage}
+                      </p>
+                    </div>
+                  )}
 
                   <Button
                     type="submit"
-                    className="bg-navy text-white hover:bg-navy/90 rounded-sm"
+                    disabled={formState === 'loading'}
+                    className="bg-deep-ink text-offwhite hover:bg-deep-ink/90 rounded-sm h-11"
                   >
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Message
+                    {formState === 'loading' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               )}
@@ -215,77 +331,50 @@ export default function ContactPage() {
           <div className="lg:col-span-1">
             <Reveal direction="right" delay={0.1}>
               <div className="space-y-8">
-                {/* Email */}
-                <div>
-                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-ink mb-3">
-                    Email us
-                  </h3>
-                  <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-navy" />
-                    hello@driftwear.studio
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    We typically respond within 24 hours (demo — not a real email).
-                  </p>
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-ink mb-3">
-                    Call us
-                  </h3>
-                  <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-navy" />
-                    +91 98765 43210
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Mon–Sat, 10am–6pm IST
-                  </p>
-                </div>
-
-                {/* Location */}
-                <div>
-                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-ink mb-3">
-                    Visit us
-                  </h3>
-                  <p className="text-sm text-muted-foreground flex items-start gap-2">
-                    <MapPin className="w-4 h-4 text-navy mt-0.5 shrink-0" />
-                    <span>
-                      Driftwear Studio (demo)
-                      <br />
-                      42 Fabric Lane, Kala Ghoda
-                      <br />
-                      Mumbai 400001, India
-                    </span>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    This is a placeholder address for the demo.
-                  </p>
-                </div>
+                {/* Email — only if configured */}
+                {storeConfig.supportEmail && (
+                  <div>
+                    <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-deep-ink mb-3">
+                      Email us
+                    </h3>
+                    <p className="text-sm text-muted-brown flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-clay shrink-0" />
+                      <a
+                        href={`mailto:${storeConfig.supportEmail}`}
+                        className="hover:text-deep-ink transition-colors"
+                      >
+                        {storeConfig.supportEmail}
+                      </a>
+                    </p>
+                    <p className="text-xs text-muted-brown mt-1.5">
+                      We typically respond within 1–2 business days.
+                    </p>
+                  </div>
+                )}
 
                 {/* Quick links */}
                 <div>
-                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-ink mb-3">
-                    Quick Links
+                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-lg text-deep-ink mb-3">
+                    Common questions
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <Link
                       href="/faq"
-                      className="block text-sm text-navy hover:underline"
+                      className="block text-sm text-muted-brown hover:text-clay transition-colors"
                     >
                       Frequently Asked Questions
                     </Link>
                     <Link
                       href="/shipping-returns"
-                      className="block text-sm text-navy hover:underline"
+                      className="block text-sm text-muted-brown hover:text-clay transition-colors"
                     >
-                      Shipping & Returns Policy
+                      Shipping &amp; Returns Policy
                     </Link>
                     <Link
-                      href="/sustainability"
-                      className="block text-sm text-navy hover:underline"
+                      href="/size-guide"
+                      className="block text-sm text-muted-brown hover:text-clay transition-colors"
                     >
-                      Sustainability
+                      Size Guide
                     </Link>
                   </div>
                 </div>

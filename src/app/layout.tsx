@@ -21,7 +21,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Driftwear Studio — Soft Everyday Clothing for Warm Days",
+  title: {
+    default: "Driftwear Studio — Soft Everyday Clothing for Warm Days",
+    template: "%s | Driftwear Studio",
+  },
   description:
     "Driftwear Studio makes easy, relaxed clothing for people who like comfort but still want to look put together. Soft fabrics, warm tones, zero fuss.",
   keywords: [
@@ -33,6 +36,7 @@ export const metadata: Metadata = {
     "resort wear",
     "summer",
     "casual",
+    "India",
   ],
   icons: {
     icon: "/logo.svg",
@@ -41,6 +45,16 @@ export const metadata: Metadata = {
     title: "Driftwear Studio",
     description: "Soft everyday clothing for warm days.",
     type: "website",
+    siteName: "Driftwear Studio",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Driftwear Studio",
+    description: "Soft everyday clothing for warm days.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -52,12 +66,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${instrumentSerif.variable} ${inter.variable} antialiased font-[family-name:var(--font-inter)] bg-[#FFFDF8] text-[#1D1D1B]`}
+        className={`${instrumentSerif.variable} ${inter.variable} antialiased font-[family-name:var(--font-inter)] bg-offwhite text-deep-ink`}
       >
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
         <div className="min-h-screen flex flex-col">
           <PromoBar />
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
           <Footer />
           <CartDrawer />
         </div>

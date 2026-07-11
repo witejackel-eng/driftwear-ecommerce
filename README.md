@@ -1,140 +1,172 @@
-# Driftwear Studio — Ecommerce Website
+# Driftwear Studio
 
-A full-stack-ready ecommerce website built with Next.js, TypeScript, Tailwind CSS, Framer Motion, product filtering, cart drawer, checkout flow, SEO pages, and free-source lifestyle imagery.
+Soft everyday clothing for warm days. An editorial ecommerce experience built with Next.js, Tailwind CSS, and modern web standards.
 
-## Live Preview
+## Brand Concept
 
-> 🚀 **[View Live Demo](https://driftwear-studio.vercel.app)** *(placeholder — deploy to Vercel to see it live)*
+Driftwear Studio designs relaxed, breathable clothing for people who like comfort but still want to look put together. Soft fabrics, warm tones, zero fuss — made for Indian warm-weather living: slow mornings, coffee walks, weekend travel, and ordinary days that deserve to feel good.
 
-## Features
+## Technology Stack
 
-- **Homepage** with hero, category tiles, product grids, editorial collections, newsletter
-- **Product Listing** with search, filters (category, size, color, price), and sort
-- **Product Detail** pages with image gallery, color/size selection, add-to-bag
-- **Cart Drawer** with quantity controls, free shipping progress, promo codes
-- **Wishlist** with localStorage persistence
-- **Checkout Flow** with form validation and demo order processing
-- **25+ Demo Products** across Women, Men, and Accessories categories
-- **Indian Pricing** in rupees (₹)
-- **Responsive Design** — mobile, tablet, and desktop
-- **Framer Motion** animations throughout
-- **SEO Metadata** on all pages
-- **Accessibility** — keyboard navigation, focus states, ARIA labels
-- **Zustand** state management with localStorage persistence
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **UI Components**: Radix UI primitives (shadcn-style)
+- **State Management**: Zustand (cart persistence)
+- **Animation**: Framer Motion (subtle, purposeful)
+- **Forms**: Zod validation
+- **Images**: Next.js Image (sharp optimization)
+- **Deployment**: Vercel (standalone output)
 
-## Tech Stack
+## Local Setup
 
-| Technology | Purpose |
-|-----------|---------|
-| [Next.js 16](https://nextjs.org/) | React framework (App Router) |
-| [TypeScript](https://www.typescriptlang.org/) | Type safety |
-| [Tailwind CSS 4](https://tailwindcss.com/) | Styling |
-| [Framer Motion](https://www.framer.com/motion/) | Animations |
-| [Zustand](https://zustand-demo.pmnd.rs/) | Client state management |
-| [shadcn/ui](https://ui.shadcn.com/) | Component library |
-| [Lucide Icons](https://lucide.dev/) | Icon set |
+```bash
+# Install dependencies
+bun install
 
-## Pages / Routes
+# Copy environment variables
+cp .env.example .env.local
+
+# Start development server
+bun run dev
+```
+
+The site runs at [http://localhost:3000](http://localhost:3000).
+
+## Development Commands
+
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Start development server on port 3000 |
+| `bun run build` | Create production build |
+| `bun run start` | Start production server |
+| `bun run lint` | Run ESLint |
+| `bun run typecheck` | TypeScript type checking |
+
+## Environment Variables
+
+See [.env.example](.env.example) for all available variables. Key settings:
+
+- **NEXT_PUBLIC_STORE_MODE** — `demo` (default) or `production`. Demo mode shows a notice and limits checkout.
+- **NEXT_PUBLIC_SITE_URL** — Base URL for sitemap generation and OG images.
+- **RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET** — Required for production payments (India-focused).
+
+## Demo vs Production Mode
+
+### Demo Mode (default)
+- Checkout creates a local order confirmation only
+- No real payment is processed
+- A tasteful demo notice appears in the footer
+- Contact form acknowledges receipt but doesn't send email
+
+### Production Mode
+Set `NEXT_PUBLIC_STORE_MODE=production` and configure:
+- Razorpay credentials for payments
+- Email provider for newsletter and contact forms
+- Support email/phone for customer care display
+- Social media URLs for footer links
+
+## Product Data Structure
+
+Products are defined in `src/data/products.ts` as typed TypeScript objects. Each product includes:
+
+```typescript
+interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  subtitle: string;
+  description: string;
+  price: number;           // INR, whole rupees
+  compareAtPrice?: number; // Original price for sale items
+  category: 'women' | 'men' | 'accessories';
+  collections: string[];   // e.g. ['linen-edit', 'soft-tee-shop']
+  tags: string[];          // e.g. ['top', 'shirt', 'linen']
+  colors: ProductColor[];
+  sizes: string[];
+  fit: string;
+  fabric: string;
+  care: string[];
+  features: string[];
+  images: string[];
+  isNew: boolean;
+  isBestSeller: boolean;
+  isSale: boolean;
+  inventory: number;
+}
+```
+
+## Key Routes
 
 | Route | Description |
 |-------|-------------|
-| `/` | Homepage |
-| `/shop` | All products with filters |
-| `/shop/[category]` | Category pages (women, men, new, best-sellers, last-call) |
+| `/` | Homepage with editorial sections |
+| `/shop` | Shop all products with filters |
+| `/shop/women` | Women's category |
+| `/shop/men` | Men's category |
+| `/shop/new` | New arrivals |
+| `/shop/best-sellers` | Best sellers |
+| `/shop/last-call` | Sale items |
 | `/product/[slug]` | Product detail page |
 | `/cart` | Full cart page |
 | `/checkout` | Checkout flow |
 | `/order-success` | Order confirmation |
-| `/wishlist` | Saved favorites |
 | `/about` | Brand story |
-| `/sustainability` | Sustainability story |
-| `/contact` | Contact form |
+| `/sustainability` | Material & care transparency |
 | `/faq` | Frequently asked questions |
 | `/shipping-returns` | Shipping and returns policy |
+| `/contact` | Contact form |
+| `/size-guide` | Size guide with measurement tables |
 | `/privacy` | Privacy policy |
 | `/terms` | Terms of service |
 
-## Product System
+## Design System
 
-- 25 demo products with full attributes (colors, sizes, fabric, care, features)
-- Helper functions: `getAllProducts`, `getProductBySlug`, `getProductsByCategory`, `getProductsByCollection`, `getBestSellers`, `getNewArrivals`, `getSaleProducts`, `searchProducts`, `filterProducts`
-- Product types: `Product`, `CartItem`, `ProductCategory`, `ProductColor`
+The brand palette is defined in `src/app/globals.css`:
 
-## Cart & Wishlist
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--color-warm-paper` | `#F7F2E8` | Section backgrounds |
+| `--color-soft-cream` | `#EFE5D5` | Secondary backgrounds |
+| `--color-light-sand` | `#E4D6C3` | Borders, dividers |
+| `--color-deep-ink` | `#1B1A17` | Primary text |
+| `--color-muted-brown` | `#6F6256` | Secondary text |
+| `--color-faded-olive` | `#70745B` | Success, badges |
+| `--color-clay` | `#A75F45` | Accent, sale badges |
+| `--color-offwhite` | `#FFFDF9` | Page background |
 
-- **Cart**: Zustand store persisted to localStorage, supports add/remove/update quantity, promo codes (try `SOFT10` for 10% off), free shipping progress bar
-- **Wishlist**: Toggle favorites from product cards and detail pages, persisted to localStorage
-
-## Demo Checkout
-
-> ⚠️ **This is a demo checkout.** No real payment is processed. Connect [Razorpay](https://razorpay.com/) or [Stripe](https://stripe.com/) for real payments.
-
-The checkout flow saves demo orders to localStorage and shows a confirmation page. All form data is handled client-side.
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ or Bun
-- npm, yarn, or bun
-
-### Installation
-
-```bash
-git clone https://github.com/witejackel-eng/driftwear-ecommerce.git
-cd driftwear-ecommerce
-npm install
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Build
-
-```bash
-npm run build
-npm start
-```
-
-### Lint
-
-```bash
-npm run lint
-```
-
-## Environment Variables
-
-Copy `.env.example` to `.env.local`:
-
-```env
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_CHECKOUT_MODE=demo
-RAZORPAY_KEY_ID=
-RAZORPAY_KEY_SECRET=
-RESEND_API_KEY=
-CONTACT_TO_EMAIL=
-```
+Typography: Instrument Serif (display) + Inter (body), loaded via `next/font/google`.
 
 ## Image Credits
 
-All images are from free sources (Unsplash) and are used under their respective licenses. Credits are tracked in `/public/images/image-credits.json`.
+See [IMAGE_CREDITS.md](./IMAGE_CREDITS.md) for all image sources. All images are stock photography used for demonstration. Replace with professional product photography for production.
 
-## Deployment (Vercel)
+## Deployment
+
+### Vercel (recommended)
 
 1. Push to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Set environment variables
+2. Connect repository to Vercel
+3. Set environment variables in Vercel dashboard
 4. Deploy
 
-## Demo Disclaimer
+### Manual
 
-This is a demo ecommerce project. Product data, prices, reviews, policies, images, and checkout behavior should be replaced with verified business data before commercial use.
+```bash
+bun run build
+NODE_ENV=production bun .next/standalone/server.js
+```
 
----
+## Known Production Requirements
 
-Built with Next.js, Tailwind CSS, and Framer Motion.
+- Replace all stock product images with actual product photography
+- Configure Razorpay (or other payment provider) for live checkout
+- Set up email provider (Resend, SendGrid) for contact form and newsletter
+- Have privacy policy and terms reviewed by a legal professional
+- Configure analytics (GTM/Meta Pixel) if desired
+- Add real social media URLs
+- Set real support email and phone number
+
+## License
+
+Private. All rights reserved.

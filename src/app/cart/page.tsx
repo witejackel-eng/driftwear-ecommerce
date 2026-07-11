@@ -28,7 +28,8 @@ import { Container } from '@/components/shared/Container';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { Reveal } from '@/components/shared/Reveal';
 import { useCartStore } from '@/store/cart-store';
-import { formatPrice, cn, getDiscountPercentage } from '@/lib/utils';
+import { storeConfig } from '@/lib/store-config';
+import { formatPrice, cn } from '@/lib/utils';
 
 const FREE_SHIPPING_THRESHOLD = 2999;
 
@@ -42,22 +43,22 @@ function FreeShippingBar({ subtotal }: { subtotal: number }) {
     <div className="bg-cream/70 rounded-sm p-4">
       <div className="flex items-center justify-between text-sm mb-2">
         <span className="flex items-center gap-2 text-ink">
-          <Truck className="w-4 h-4 text-navy" />
+          <Truck className="w-4 h-4 text-faded-olive" />
           {qualified ? (
-            <>You qualify for <strong className="text-olive">free shipping!</strong></>
+            <>You qualify for <strong className="text-faded-olive">free shipping!</strong></>
           ) : (
             <>
-              Add <strong className="text-terracotta">{formatPrice(remaining)}</strong> more for
+              Add <strong className="text-clay">{formatPrice(remaining)}</strong> more for
               free shipping
             </>
           )}
         </span>
       </div>
-      <div className="h-1.5 bg-sand rounded-full overflow-hidden">
+      <div className="h-1.5 bg-sand/60 rounded-full overflow-hidden">
         <div
           className={cn(
             'h-full rounded-full transition-all duration-500',
-            qualified ? 'bg-olive' : 'bg-terracotta'
+            qualified ? 'bg-faded-olive' : 'bg-clay'
           )}
           style={{ width: `${progress}%` }}
         />
@@ -89,7 +90,7 @@ function CartItemCard() {
               {/* Image */}
               <Link
                 href={`/product/${product.slug}`}
-                className="relative w-24 h-32 md:w-28 md:h-36 bg-cream rounded-sm overflow-hidden shrink-0"
+                className="relative w-24 h-32 md:w-28 md:h-36 bg-cream overflow-hidden shrink-0"
               >
                 <Image
                   src={imageUrl}
@@ -106,7 +107,7 @@ function CartItemCard() {
                   <div>
                     <Link
                       href={`/product/${product.slug}`}
-                      className="text-sm font-medium text-ink hover:text-navy transition-colors line-clamp-1"
+                      className="text-sm font-medium text-ink hover:text-clay transition-colors line-clamp-1"
                     >
                       {product.name}
                     </Link>
@@ -118,8 +119,8 @@ function CartItemCard() {
                   </div>
                   <button
                     onClick={() => removeItem(product.id, selectedColor, selectedSize)}
-                    className="text-muted-foreground hover:text-terracotta transition-colors shrink-0 p-1"
-                    aria-label="Remove item"
+                    className="text-muted-foreground hover:text-clay transition-colors shrink-0 p-1"
+                    aria-label={`Remove ${product.name} from bag`}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -138,6 +139,7 @@ function CartItemCard() {
                         )
                       }
                       className="w-8 h-8 flex items-center justify-center hover:bg-cream transition-colors"
+                      aria-label="Decrease quantity"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -154,6 +156,7 @@ function CartItemCard() {
                         )
                       }
                       className="w-8 h-8 flex items-center justify-center hover:bg-cream transition-colors"
+                      aria-label="Increase quantity"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -196,7 +199,7 @@ function CartSummaryCard() {
   const subtotal = getSubtotal();
   const discount = getDiscount();
   const total = getTotal();
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 99;
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : storeConfig.shippingCost;
 
   const handleApplyPromo = () => {
     const result = applyPromoCode(codeInput);
@@ -212,8 +215,8 @@ function CartSummaryCard() {
 
       {/* Promo code */}
       {promoCode ? (
-        <div className="flex items-center justify-between bg-olive/10 rounded-sm px-3 py-2">
-          <span className="text-sm text-olive font-medium">
+        <div className="flex items-center justify-between bg-faded-olive/10 rounded-sm px-3 py-2">
+          <span className="text-sm text-faded-olive font-medium">
             <Tag className="w-3 h-3 inline mr-1.5" />
             {promoCode} — {promoDiscount}% off
           </span>
@@ -222,7 +225,8 @@ function CartSummaryCard() {
               removePromoCode();
               setPromoMessage('');
             }}
-            className="text-olive hover:text-olive/80"
+            className="text-faded-olive hover:text-faded-olive/80"
+            aria-label="Remove promo code"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -237,14 +241,14 @@ function CartSummaryCard() {
               setPromoMessage('');
             }}
             onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
-            className="h-9 rounded-sm bg-white border-sand text-sm"
+            className="h-9 rounded-sm bg-offwhite border-sand text-sm"
           />
           <Button
             variant="outline"
             size="sm"
             onClick={handleApplyPromo}
             disabled={!codeInput.trim()}
-            className="h-9 rounded-sm shrink-0"
+            className="h-9 rounded-sm shrink-0 border-sand text-ink hover:bg-cream"
           >
             Apply
           </Button>
@@ -254,8 +258,9 @@ function CartSummaryCard() {
         <p
           className={cn(
             'text-xs',
-            promoMessage.includes('applied') ? 'text-olive' : 'text-terracotta'
+            promoMessage.includes('applied') ? 'text-faded-olive' : 'text-clay'
           )}
+          role="alert"
         >
           {promoMessage}
         </p>
@@ -270,14 +275,14 @@ function CartSummaryCard() {
           <span className="text-ink">{formatPrice(subtotal)}</span>
         </div>
         {discount > 0 && (
-          <div className="flex justify-between text-olive">
+          <div className="flex justify-between text-faded-olive">
             <span>Discount</span>
             <span>-{formatPrice(discount)}</span>
           </div>
         )}
         <div className="flex justify-between">
           <span className="text-muted-foreground">Shipping</span>
-          <span className={shipping === 0 ? 'text-olive' : 'text-ink'}>
+          <span className={shipping === 0 ? 'text-faded-olive' : 'text-ink'}>
             {shipping === 0 ? 'Free' : formatPrice(shipping)}
           </span>
         </div>
@@ -291,7 +296,7 @@ function CartSummaryCard() {
       {/* Checkout button */}
       <Button
         asChild
-        className="w-full h-12 bg-navy text-white hover:bg-navy/90 rounded-sm text-sm font-medium mt-2"
+        className="w-full h-12 bg-ink text-offwhite hover:bg-ink/90 rounded-sm text-sm font-medium mt-2"
       >
         <Link href="/checkout">
           Checkout <ArrowRight className="w-4 h-4 ml-2" />
@@ -300,7 +305,7 @@ function CartSummaryCard() {
 
       <Link
         href="/shop"
-        className="block text-center text-sm text-navy hover:underline mt-2"
+        className="block text-center text-sm text-muted-foreground hover:text-ink transition-colors mt-2"
       >
         Continue Shopping
       </Link>
@@ -341,7 +346,7 @@ export default function CartPage() {
         {items.length === 0 ? (
           <EmptyState
             icon={ShoppingBag}
-            title="Your bag is taking a little vacation."
+            title="Your bag is empty"
             description="Looks like you haven't added anything yet. Time to change that."
             actionLabel="Start Shopping"
             onAction={() => {

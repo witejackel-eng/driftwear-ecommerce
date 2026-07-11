@@ -4,73 +4,66 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Container } from '@/components/shared/Container';
-import { SectionHeader } from '@/components/shared/SectionHeader';
 import { Reveal } from '@/components/shared/Reveal';
 import { generateSEOMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = generateSEOMetadata({
-  title: 'About Us',
+  title: 'About',
   description:
-    'Driftwear Studio is a demo clothing brand built around the idea that good clothes should make ordinary days feel easier. Learn our story.',
+    'Driftwear Studio makes soft, everyday clothing for warm weather and real life. Designed for slow mornings, warm streets, and weekend travel.',
   path: '/about',
 });
 
 export default function AboutPage() {
   return (
     <main className="flex-1">
-      {/* Hero */}
-      <section className="relative h-[50vh] md:h-[60vh] bg-cream overflow-hidden">
+      {/* Hero — full-width image, 50vh */}
+      <section className="relative h-[50vh] overflow-hidden">
         <Image
           src="/images/about/studio.jpg"
           alt="Driftwear Studio workspace"
           fill
-          className="object-cover opacity-80"
+          className="object-cover"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-navy/30" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Container className="text-center">
+        <div className="absolute inset-0 bg-deep-ink/30" />
+        <div className="absolute inset-0 flex items-end">
+          <Container className="pb-10 md:pb-14">
             <Reveal>
-              <h1 className="font-[family-name:var(--font-instrument-serif)] text-4xl md:text-5xl lg:text-6xl text-white mb-4">
-                About Driftwear
+              <h1 className="font-[family-name:var(--font-instrument-serif)] text-4xl md:text-5xl lg:text-6xl text-offwhite leading-tight">
+                Clothes for the
+                <br />
+                days that matter
               </h1>
-              <p className="text-white/80 text-sm md:text-base max-w-lg mx-auto">
-                A small studio making clothes that feel like a quiet afternoon.
-              </p>
             </Reveal>
           </Container>
         </div>
       </section>
 
-      {/* Origin Story */}
-      <section className="py-16 md:py-24">
+      {/* Brand Philosophy */}
+      <section className="py-16 md:py-24 bg-offwhite">
         <Container>
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-2xl mx-auto text-center">
             <Reveal>
-              <SectionHeader
-                title="How we started"
-                subtitle="Not with a grand plan — just a feeling that clothes should be easier."
-                align="center"
-              />
+              <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+                Our Philosophy
+              </p>
+              <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl lg:text-4xl text-deep-ink leading-snug mb-6">
+                Soft, everyday clothing for warm weather and real life
+              </h2>
             </Reveal>
             <Reveal delay={0.1}>
-              <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-sm text-muted-brown leading-relaxed">
                 <p>
-                  Driftwear Studio is a demo clothing brand built around the idea that good clothes
-                  should make ordinary days feel easier. We started (hypothetically) in a small
-                  apartment with a sewing machine and too many fabric swatches, convinced that the
-                  world didn&apos;t need another fast-fashion label.
+                  Driftwear Studio makes the kind of clothes you reach for without
+                  thinking — the ones that feel right the moment you put them on and
+                  still feel right eight hours later.
                 </p>
                 <p>
-                  The idea was simple: make a handful of pieces that you&apos;d reach for every
-                  single morning. Not statement pieces. Not trend-chasing. Just really, really good
-                  basics in fabrics that feel as good on day one hundred as they do on day one.
-                </p>
-                <p>
-                  We&apos;re not trying to be the biggest brand in the world. We&apos;re trying
-                  to be the one you keep coming back to because everything just works — the fit,
-                  the fabric, the colours that go with literally everything in your closet.
+                  We&apos;re not chasing trends or building a lifestyle brand. We&apos;re
+                  making a handful of well-considered pieces that work with the way
+                  people actually dress: simply, comfortably, and without fuss.
                 </p>
               </div>
             </Reveal>
@@ -78,38 +71,133 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* What we care about */}
-      <section className="py-16 md:py-24 bg-cream">
+      {/* Why these clothes exist */}
+      <section className="py-16 md:py-24">
         <Container>
-          <SectionHeader
-            title="What we care about"
-            subtitle="A few things that actually matter to us."
-            align="center"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <Reveal direction="left">
+              <div>
+                <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+                  The Idea
+                </p>
+                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink leading-snug mb-6">
+                  Designed for slow mornings, warm streets, coffee walks, and weekend travel
+                </h2>
+                <div className="space-y-4 text-sm text-muted-brown leading-relaxed">
+                  <p>
+                    Most clothing is designed around occasions — meetings, parties,
+                    workouts. But the majority of life happens in between: the quiet
+                    mornings, the errand runs, the weekends with nowhere specific to be.
+                  </p>
+                  <p>
+                    That&apos;s the wardrobe gap we&apos;re interested in. Clothes that
+                    are presentable enough for a café lunch but comfortable enough to
+                    wear all day at home. No switching required.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal direction="right" delay={0.1}>
+              <div className="relative aspect-[4/5] bg-warm-paper overflow-hidden">
+                <Image
+                  src="/images/about/fabric-detail.jpg"
+                  alt="Close-up of linen fabric texture"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      {/* Fabric approach */}
+      <section className="py-16 md:py-24 bg-warm-paper">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <Reveal direction="left">
+              <div className="relative aspect-[4/5] bg-light-sand overflow-hidden">
+                <Image
+                  src="/images/about/team.jpg"
+                  alt="Fabric draped in natural light"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+            </Reveal>
+            <Reveal direction="right" delay={0.1}>
+              <div>
+                <p className="font-[family-name:var(--font-instrument-serif)] text-clay text-xs uppercase tracking-widest mb-4">
+                  Fabric First
+                </p>
+                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink leading-snug mb-6">
+                  Natural fibers, pre-washed for softness, breathable for Indian summers
+                </h2>
+                <div className="space-y-4 text-sm text-muted-brown leading-relaxed">
+                  <p>
+                    We start with fabric because that&apos;s what you actually feel. Linen
+                    that drapes without clinging. Cotton that breathes when the
+                    temperature climbs. Every piece is pre-washed so it arrives soft
+                    from day one — no breaking-in period, no surprises after the first wash.
+                  </p>
+                  <p>
+                    We focus on natural fibers because they work best in warm weather.
+                    They&apos;re breathable, they age well, and they get softer with
+                    wear rather than losing their hand feel.
+                  </p>
+                  <p>
+                    We think about weight, drape, and how a fabric behaves after
+                    twenty washes — not just how it looks on a hanger.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      {/* Three pillars */}
+      <section className="py-16 md:py-24 bg-offwhite">
+        <Container>
+          <Reveal>
+            <div className="max-w-2xl mx-auto text-center mb-12 md:mb-16">
+              <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl lg:text-4xl text-deep-ink leading-snug">
+                What we focus on
+              </h2>
+            </div>
+          </Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: 'Fabric First',
+                label: '01',
+                title: 'Fabric that feels right',
                 description:
-                  'Every piece starts with the fabric. We source natural fibers — linen, organic cotton, Tencel — because how something feels against your skin is non-negotiable.',
+                  'Every piece starts with the material. Natural fibers, pre-washed for immediate softness, chosen for how they feel against your skin in warm weather.',
               },
               {
-                title: 'Relaxed Fit, Relaxed Mind',
+                label: '02',
+                title: 'Relaxed, intentional fit',
                 description:
-                  'Our clothes are designed for comfort. Not oversized-for-the-sake-of-it, but thoughtfully proportioned so you look put-together without trying too hard.',
+                  'Not oversized for the sake of it. Thoughtfully proportioned so you look put-together without trying — comfortable without looking sloppy.',
               },
               {
-                title: 'Honest Pricing',
+                label: '03',
+                title: 'Honest pricing',
                 description:
-                  'No inflated MSRPs with fake markdowns. The price you see is the price it should be. We cut out middlemen and markups to keep things fair.',
+                  'The price you see is the price it costs. No inflated MSRPs with fake markdowns. We keep margins fair by focusing on fewer, better pieces.',
               },
             ].map((item, i) => (
-              <Reveal key={item.title} delay={i * 0.1}>
-                <div className="bg-white rounded-sm p-6 h-full">
-                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-xl text-ink mb-3">
+              <Reveal key={item.label} delay={i * 0.1}>
+                <div className="h-full">
+                  <span className="font-[family-name:var(--font-instrument-serif)] text-clay text-3xl md:text-4xl block mb-4">
+                    {item.label}
+                  </span>
+                  <h3 className="font-[family-name:var(--font-instrument-serif)] text-xl text-deep-ink mb-3">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-brown leading-relaxed">
                     {item.description}
                   </p>
                 </div>
@@ -119,106 +207,20 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* Fabric Philosophy */}
-      <section className="py-16 md:py-24">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <Reveal direction="left">
-              <div className="relative aspect-[4/5] bg-cream rounded-sm overflow-hidden">
-                <Image
-                  src="/images/about/fabric-detail.jpg"
-                  alt="Close-up of Driftwear fabric"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-            </Reveal>
-            <Reveal direction="right" delay={0.1}>
-              <div>
-                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-ink mb-4">
-                  Fabric is everything
-                </h2>
-                <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-                  <p>
-                    We spend an embarrassing amount of time thinking about fabric. The weight, the
-                    drape, how it behaves after the twentieth wash. Most people don&apos;t notice
-                    good fabric — but they definitely notice bad fabric.
-                  </p>
-                  <p>
-                    Our linen comes from European flax, pre-washed so it arrives feeling like
-                    you&apos;ve already broken it in. Our cotton is organic and brushed for that
-                    lived-in softness from the very first wear. Every fabric choice is made with
-                    warm climates in mind — breathable, lightweight, and easy to care for.
-                  </p>
-                  <p>
-                    We believe the best fabric is the one you don&apos;t think about. It just
-                    feels right, wash after wash.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      {/* Team / Studio */}
-      <section className="py-16 md:py-24 bg-cream">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <Reveal direction="left" className="md:order-2">
-              <div className="relative aspect-[4/5] bg-cream rounded-sm overflow-hidden">
-                <Image
-                  src="/images/about/team.jpg"
-                  alt="The Driftwear Studio team"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-            </Reveal>
-            <Reveal direction="right" delay={0.1} className="md:order-1">
-              <div>
-                <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-ink mb-4">
-                  A small team, a big feeling
-                </h2>
-                <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-                  <p>
-                    We&apos;re a small team — the kind where everyone wears multiple hats and
-                    the office dog has an official title. There&apos;s no corporate ladder here,
-                    just people who care about making good clothes.
-                  </p>
-                  <p>
-                    Our studio is where the magic (and the mess) happens. Fabric swatches
-                    everywhere, half-finished prototypes on every chair, and a suspicious amount
-                    of chai consumption. It&apos;s not glamorous, but it&apos;s honest work that
-                    we genuinely love.
-                  </p>
-                  <p>
-                    If you&apos;re ever in the neighbourhood, say hello. We&apos;ll probably
-                    offer you tea and talk your ear off about button plackets.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
       {/* CTA */}
       <section className="py-16 md:py-24">
         <Container className="text-center">
           <Reveal>
-            <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-ink mb-4">
-              Ready to see what the fuss is about?
+            <h2 className="font-[family-name:var(--font-instrument-serif)] text-2xl md:text-3xl text-deep-ink mb-4">
+              See what we make
             </h2>
-            <p className="text-sm text-muted-foreground mb-8 max-w-md mx-auto">
-              Browse our collection of everyday essentials designed to make getting dressed the
-              easiest part of your day.
+            <p className="text-sm text-muted-brown mb-8 max-w-md mx-auto">
+              Browse the collection — everyday essentials in fabrics that feel as good
+              as they look.
             </p>
             <Button
               asChild
-              className="bg-navy text-white hover:bg-navy/90 rounded-sm"
+              className="bg-deep-ink text-offwhite hover:bg-deep-ink/90 rounded-sm"
             >
               <Link href="/shop">
                 Shop Now <ArrowRight className="w-4 h-4 ml-2" />

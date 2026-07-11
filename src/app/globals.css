@@ -43,50 +43,82 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Driftwear brand colors */
-  --color-cream: #FAF3E7;
-  --color-sand: #E8D8C3;
-  --color-sun-yellow: #F4C95D;
-  --color-terracotta: #C86B4A;
-  --color-navy: #1F3A4A;
-  --color-olive: #8A9A5B;
-  --color-ink: #1D1D1B;
-  --color-offwhite: #FFFDF8;
+  /* ── Driftwear Brand Palette ─────────────────────────────────────── */
+  --color-warm-paper: #F7F2E8;
+  --color-soft-cream: #EFE5D5;
+  --color-light-sand: #E4D6C3;
+  --color-deep-ink: #1B1A17;
+  --color-muted-brown: #6F6256;
+  --color-faded-olive: #70745B;
+  --color-clay: #A75F45;
+  --color-offwhite: #FFFDF9;
+
+  /* Aliases kept for backward compat during migration */
+  --color-cream: #F7F2E8;
+  --color-sand: #E4D6C3;
+  --color-sun-yellow: #D4A84B;
+  --color-terracotta: #A75F45;
+  --color-navy: #1B1A17;
+  --color-olive: #70745B;
+  --color-ink: #1B1A17;
+
+  /* ── Spacing Scale ──────────────────────────────────────────────── */
+  --spacing-section-y: clamp(3.5rem, 6vw, 6rem);
+
+  /* ── Animation Tokens ───────────────────────────────────────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+
+  /* ── Z-index Layers ─────────────────────────────────────────────── */
+  --z-promo: 45;
+  --z-header: 50;
+  --z-mega-menu: 55;
+  --z-search: 60;
+  --z-cart-drawer: 70;
+  --z-mobile-menu: 70;
+  --z-modal: 80;
+  --z-toast: 90;
+
+  /* ── Container Widths ───────────────────────────────────────────── */
+  --container-narrow: 720px;
+  --container-wide: 1400px;
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: #FFFDF8;
-  --foreground: #1D1D1B;
-  --card: #FFFDF8;
-  --card-foreground: #1D1D1B;
-  --popover: #FFFDF8;
-  --popover-foreground: #1D1D1B;
-  --primary: #1F3A4A;
-  --primary-foreground: #FFFDF8;
-  --secondary: #E8D8C3;
-  --secondary-foreground: #1D1D1B;
-  --muted: #FAF3E7;
-  --muted-foreground: #6B6B65;
-  --accent: #F4C95D;
-  --accent-foreground: #1D1D1B;
-  --destructive: #C86B4A;
-  --border: #E8D8C3;
-  --input: #E8D8C3;
-  --ring: #1F3A4A;
-  --chart-1: #C86B4A;
-  --chart-2: #8A9A5B;
-  --chart-3: #1F3A4A;
-  --chart-4: #F4C95D;
-  --chart-5: #E8D8C3;
-  --sidebar: #FAF3E7;
-  --sidebar-foreground: #1D1D1B;
-  --sidebar-primary: #1F3A4A;
-  --sidebar-primary-foreground: #FFFDF8;
-  --sidebar-accent: #E8D8C3;
-  --sidebar-accent-foreground: #1D1D1B;
-  --sidebar-border: #E8D8C3;
-  --sidebar-ring: #1F3A4A;
+  --radius: 0.375rem;
+  --background: #FFFDF9;
+  --foreground: #1B1A17;
+  --card: #FFFDF9;
+  --card-foreground: #1B1A17;
+  --popover: #FFFDF9;
+  --popover-foreground: #1B1A17;
+  --primary: #1B1A17;
+  --primary-foreground: #FFFDF9;
+  --secondary: #EFE5D5;
+  --secondary-foreground: #1B1A17;
+  --muted: #F7F2E8;
+  --muted-foreground: #6F6256;
+  --accent: #A75F45;
+  --accent-foreground: #FFFDF9;
+  --destructive: #B5453A;
+  --border: #E4D6C3;
+  --input: #E4D6C3;
+  --ring: #1B1A17;
+  --chart-1: #A75F45;
+  --chart-2: #70745B;
+  --chart-3: #1B1A17;
+  --chart-4: #D4A84B;
+  --chart-5: #E4D6C3;
+  --sidebar: #F7F2E8;
+  --sidebar-foreground: #1B1A17;
+  --sidebar-primary: #1B1A17;
+  --sidebar-primary-foreground: #FFFDF9;
+  --sidebar-accent: #EFE5D5;
+  --sidebar-accent-foreground: #1B1A17;
+  --sidebar-border: #E4D6C3;
+  --sidebar-ring: #1B1A17;
 }
 
 @layer base {
@@ -96,9 +128,37 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Skip to content link for accessibility */
+  .skip-to-content {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 9999;
+    padding: 0.5rem 1rem;
+    background: #1B1A17;
+    color: #FFFDF9;
+    font-size: 0.875rem;
+  }
+  .skip-to-content:focus {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
-/* Custom scrollbar styling */
+/* ── Reduced Motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Custom Scrollbar ────────────────────────────────────────────── */
 .scrollbar-thin::-webkit-scrollbar {
   width: 4px;
 }
@@ -106,9 +166,15 @@
   background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: #E8D8C3;
+  background-color: #E4D6C3;
   border-radius: 999px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background-color: #C86B4A;
+  background-color: #A75F45;
+}
+
+/* ── Focus Visible ───────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #1B1A17;
+  outline-offset: 2px;
 }
