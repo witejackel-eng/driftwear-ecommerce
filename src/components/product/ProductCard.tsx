@@ -55,7 +55,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
             {/* Primary image */}
             <Image
               src={primaryColor.image}
-              alt={product.name}
+              alt={`${product.name} in ${primaryColor.name}`}
               fill
               className="object-cover transition-opacity duration-500"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
