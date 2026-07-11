@@ -31,17 +31,15 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
   const router = useRouter();
   const searchRef = useRef<HTMLInputElement>(null);
 
-  // Prevent body scroll when open (Sheet handles this via Radix, but we
-  // also lock it in case of race conditions with other overlays)
+  // Focus the search input after the sheet opens
   useEffect(() => {
     if (open) {
-      // Focus the search input after the sheet finishes opening
       const t = setTimeout(() => searchRef.current?.focus(), 350);
       return () => clearTimeout(t);
     }
   }, [open]);
 
-  // Close on Escape (redundant with Sheet but ensures consistent behavior)
+  // Close on Escape
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -70,7 +68,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
   return (
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent
-        side="right"
+        side="left"
         className={cn(
           "w-full sm:max-w-sm bg-offwhite border-light-sand p-0 overflow-y-auto scrollbar-thin"
         )}
@@ -102,13 +100,13 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
         <nav aria-label="Mobile navigation" className="pb-8">
           {/* Quick links — New, Best Sellers, Last Call, Story */}
           <div className="px-5">
-            {plainLinks.map((link, i) => (
+            {plainLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
                 className={cn(
-                  "flex items-center justify-between py-3 text-[13px] tracking-[0.01em] transition-colors duration-150",
+                  "flex items-center justify-between py-3.5 text-[13px] tracking-[0.01em] transition-colors duration-150",
                   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink rounded-sm",
                   link.label === "Last Call"
                     ? "text-clay font-medium"
@@ -121,7 +119,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
             ))}
           </div>
 
-          <Separator className="my-2 bg-light-sand" />
+          <Separator className="my-1 bg-light-sand" />
 
           {/* Accordion for Women / Men subcategories */}
           <Accordion type="multiple" className="px-5">
@@ -129,7 +127,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               <AccordionItem value="women" className="border-b-0">
                 <AccordionTrigger
                   className={cn(
-                    "py-3 text-[13px] font-medium text-deep-ink hover:no-underline",
+                    "py-3.5 text-[13px] font-medium text-deep-ink hover:no-underline",
                     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink rounded-sm"
                   )}
                 >
@@ -143,7 +141,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                         href={cat.href}
                         onClick={onClose}
                         className={cn(
-                          "flex items-center justify-between py-2 pl-2 text-[13px]",
+                          "flex items-center justify-between py-2.5 pl-2 text-[13px]",
                           "text-muted-brown hover:text-clay transition-colors duration-150",
                           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink rounded-sm"
                         )}
@@ -156,7 +154,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                       href="/shop/women"
                       onClick={onClose}
                       className={cn(
-                        "flex items-center justify-between py-2.5 pl-2 text-[13px] font-medium",
+                        "flex items-center justify-between py-3 pl-2 text-[13px] font-medium",
                         "text-deep-ink hover:text-clay transition-colors duration-150",
                         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink rounded-sm"
                       )}
@@ -173,7 +171,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               <AccordionItem value="men" className="border-b-0">
                 <AccordionTrigger
                   className={cn(
-                    "py-3 text-[13px] font-medium text-deep-ink hover:no-underline",
+                    "py-3.5 text-[13px] font-medium text-deep-ink hover:no-underline",
                     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink rounded-sm"
                   )}
                 >
@@ -187,7 +185,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                         href={cat.href}
                         onClick={onClose}
                         className={cn(
-                          "flex items-center justify-between py-2 pl-2 text-[13px]",
+                          "flex items-center justify-between py-2.5 pl-2 text-[13px]",
                           "text-muted-brown hover:text-clay transition-colors duration-150",
                           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink rounded-sm"
                         )}
@@ -200,7 +198,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                       href="/shop/men"
                       onClick={onClose}
                       className={cn(
-                        "flex items-center justify-between py-2.5 pl-2 text-[13px] font-medium",
+                        "flex items-center justify-between py-3 pl-2 text-[13px] font-medium",
                         "text-deep-ink hover:text-clay transition-colors duration-150",
                         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-ink rounded-sm"
                       )}
@@ -214,7 +212,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
             )}
           </Accordion>
 
-          <Separator className="my-2 bg-light-sand" />
+          <Separator className="my-1 bg-light-sand" />
 
           {/* Help links */}
           <div className="px-5">
