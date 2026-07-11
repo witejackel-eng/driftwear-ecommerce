@@ -1,0 +1,514 @@
+[
+  {
+    "filename": "/images/hero/hero-main.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "hero"
+  },
+  {
+    "filename": "/images/hero/hero-secondary.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "hero"
+  },
+  {
+    "filename": "/images/categories/women.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "categories"
+  },
+  {
+    "filename": "/images/categories/men.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "categories"
+  },
+  {
+    "filename": "/images/categories/linen.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "categories"
+  },
+  {
+    "filename": "/images/categories/last-call.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "categories"
+  },
+  {
+    "filename": "/images/collections/linen-edit.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=1000&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "collections"
+  },
+  {
+    "filename": "/images/collections/weekend-shop.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1000&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "collections"
+  },
+  {
+    "filename": "/images/collections/best-sellers.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1000&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "collections"
+  },
+  {
+    "filename": "/images/collections/soft-tee.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1000&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "collections"
+  },
+  {
+    "filename": "/images/fabric/soft.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "fabric"
+  },
+  {
+    "filename": "/images/fabric/move.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1475180098004-ca77a66827be?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "fabric"
+  },
+  {
+    "filename": "/images/fabric/wash.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "fabric"
+  },
+  {
+    "filename": "/images/social/social-1.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "social"
+  },
+  {
+    "filename": "/images/social/social-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "social"
+  },
+  {
+    "filename": "/images/social/social-3.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "social"
+  },
+  {
+    "filename": "/images/social/social-4.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=400&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "social"
+  },
+  {
+    "filename": "/images/social/social-5.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1506634572416-48cdfe530110?w=400&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "social"
+  },
+  {
+    "filename": "/images/about/team.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1000&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "about"
+  },
+  {
+    "filename": "/images/about/fabric-detail.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "about"
+  },
+  {
+    "filename": "/images/sustainability/fabric.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1000&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "sustainability"
+  },
+  {
+    "filename": "/images/sustainability/packaging.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "sustainability"
+  },
+  {
+    "filename": "/images/products/women-linen-shirt.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-lazy-tee.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-lazy-tee-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-cotton-dress.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-cotton-dress-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-rib-tank.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-rib-tank-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-drawstring-pant.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-drawstring-pant-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-wrap-skirt.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-wrap-skirt-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-matching-set.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-matching-set-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-linen-midi-dress.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-linen-midi-dress-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-lounge-short.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1506634572416-48cdfe530110?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/women-lounge-short-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-linen-shirt.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-linen-shirt-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-resort-shirt.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-resort-shirt-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-crew-tee.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-crew-tee-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-chino-short.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-chino-short-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-sweatshirt.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-sweatshirt-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1578681994506-b8f463449011?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-overshirt.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-overshirt-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-polo-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-swim-short.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-swim-short-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1506634572416-48cdfe530110?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-trouser.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/men-trouser-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/tote-bag.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/tote-bag-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/cap-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/socks.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/graphic-tee-sale.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/graphic-tee-sale-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/double-cloth-sale.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  },
+  {
+    "filename": "/images/products/double-cloth-sale-2.jpg",
+    "source": "Unsplash",
+    "photographer": "Various (Unsplash contributors)",
+    "originalUrl": "https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&q=80&auto=format&fit=crop",
+    "license": "Unsplash License - Free for commercial use",
+    "usageLocation": "products"
+  }
+]
