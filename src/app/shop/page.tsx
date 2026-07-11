@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -283,6 +283,31 @@ function FilterPanelContent({
 
 // ─── Main Page ────────────────────────────────────────────────────────────
 export default function ShopPage() {
+  return (
+    <Suspense fallback={<ShopFallback />}>
+      <ShopContent />
+    </Suspense>
+  );
+}
+
+function ShopFallback() {
+  return (
+    <main className="flex-1">
+      <Container className="py-8 md:py-12">
+        <div className="animate-pulse space-y-8">
+          <div className="h-10 w-48 bg-sand rounded" />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] bg-sand rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </Container>
+    </main>
+  );
+}
+
+function ShopContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
